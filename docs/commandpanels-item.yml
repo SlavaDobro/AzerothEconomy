@@ -1,0 +1,12 @@
+# В layout замените '49': [frame] на '49': [economy], а блок ниже добавьте в items.
+  economy:
+    material: GOLD_INGOT
+    name: '&#FFD100Экономика'
+    lore:
+    - '&#E8DCC0Кошелёк, банк, почта и аукцион'
+    - '&7Монеты: &f%aeconomy_gold%'
+    actions:
+      commands:
+      - '[close]'
+      - '[delay] 1'
+      - '[chat] /aeconomy'

@@ -1,0 +1,24 @@
+PASS MMOItems public API: ordinary item allowed
+PASS MMOItems bound item transfer rejected
+PASS Paper binary roundtrip: [Paper-PDC-enchant-lore, Nexo-awakened_shaman_lifescepter, MMOItems-LONG_SWORD, MMOItems-soulbound]
+PASS single Vault provider AzerothEconomy
+PASS Vault rejects NaN/Infinity/negative/fractions
+PASS Vault deposit/withdraw uses the same copper balance
+PASS PlaceholderAPI registered expansion and formatted balance
+PASS GUI handlers: shift-click, number key, double-click, drop, offhand, drag, repeated left click (proxy player)
+PASS exact item data through Paper-PDC-enchant-lore/bank
+PASS exact item data through Paper-PDC-enchant-lore/mail
+PASS exact item data through Paper-PDC-enchant-lore/trade
+PASS exact item data through Paper-PDC-enchant-lore/auction
+PASS exact item data through Nexo-awakened_shaman_lifescepter/bank
+PASS exact item data through Nexo-awakened_shaman_lifescepter/mail
+PASS exact item data through Nexo-awakened_shaman_lifescepter/trade
+PASS exact item data through Nexo-awakened_shaman_lifescepter/auction
+PASS exact item data through MMOItems-LONG_SWORD/bank
+PASS exact item data through MMOItems-LONG_SWORD/mail
+PASS exact item data through MMOItems-LONG_SWORD/trade
+PASS exact item data through MMOItems-LONG_SWORD/auction
+PASS exact item data through MMOItems-soulbound/bank
+PASS exact item data through MMOItems-soulbound/mail
+PASS exact item data through MMOItems-soulbound/trade
+PASS exact item data through MMOItems-soulbound/auction

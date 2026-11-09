@@ -1,0 +1,218 @@
+[
+  {
+    "path": "server/libraries/software/amazon/awssdk/annotations/2.32.4/annotations-2.32.4.jar",
+    "sha256": "c800b8869c6ce1e8209dc4fa434f95acba565d62c203b5eec2f1212397dc25e6"
+  },
+  {
+    "path": "server/libraries/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
+    "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+  },
+  {
+    "path": "server/libraries/org/jetbrains/annotations/13.0/annotations-13.0.jar",
+    "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478"
+  },
+  {
+    "path": "server/libraries/org/jetbrains/annotations/24.0.1/annotations-24.0.1.jar",
+    "sha256": "61666dbce7e42e6c85b43c04fcfb8293a21dcb55b3c80e869270ce42c01a6b35"
+  },
+  {
+    "path": "server/libraries/org/jetbrains/annotations/24.1.0/annotations-24.1.0.jar",
+    "sha256": "27a770dc7ce50500918bb8c3c0660c98290630ec796b5e3cf6b90f403b3033c6"
+  },
+  {
+    "path": "server/libraries/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.jar",
+    "sha256": "ce930b3ee048520a0ab538eb8d1627b301367fc1b300837235387aded6d89ba1"
+  },
+  {
+    "path": "server/libraries/net/kyori/examination-string/1.3.0/examination-string-1.3.0.jar",
+    "sha256": "7d01fc25a4bb3af0e1662685455f4541fbf4626216ea5846e455c1491e156b8c"
+  },
+  {
+    "path": "server/libraries/net/kyori/examination-api/1.3.0/examination-api-1.3.0.jar",
+    "sha256": "c9237ffecb05428f6eff86216246ac70ce0b47b04c08ea7ca35020fde57f8492"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-plain/5.2.0/adventure-text-serializer-plain-5.2.0.jar",
+    "sha256": "f6424cc038a631b79cc4b74b6b353d5d007c99b38f9be482e0c2448a00eecd21"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-legacy/4.13.0/adventure-text-serializer-legacy-4.13.0.jar",
+    "sha256": "7209db9d31ae1c2f94ed03d8b14965898be713a452f882fd541b0c2d54f58e2d"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-legacy/4.13.1/adventure-text-serializer-legacy-4.13.1.jar",
+    "sha256": "b562905c6b0fb38c81306d0f67888dcf5a782698fdbd5e04a5357e179e31aece"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-legacy/5.2.0/adventure-text-serializer-legacy-5.2.0.jar",
+    "sha256": "1231a0de417de66c59e2f2a3892ecca6b8d48621df6f1d9a2f81b01f57e328b7"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-json/4.14.0/adventure-text-serializer-json-4.14.0.jar",
+    "sha256": "62d15c970c8f336890f11f0f7492c7c01016bcd2b186356435c155cbdf609ccb"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-json/4.16.0/adventure-text-serializer-json-4.16.0.jar",
+    "sha256": "34d7384842cd21b54289614fe68417ff8ecac7009f739c4427976a587b7ed890"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-json/5.2.0/adventure-text-serializer-json-5.2.0.jar",
+    "sha256": "adb5410006175b9aa6343bfadd0bd11c4a6955ee2abc1a58abe2a3fa6cbd9ab5"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-gson-legacy-impl/4.13.1/adventure-text-serializer-gson-legacy-impl-4.13.1.jar",
+    "sha256": "e9b7bcb548388b9ead4c4dc9936040654a2ec3f2489eb0bed5ba30db7f3a13dd"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-gson/4.14.0/adventure-text-serializer-gson-4.14.0.jar",
+    "sha256": "15b4bc3b0ec6c4ebe722889fb8be586ad3db1e7f88c4e8c72d3ff43e8ceccd18"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-gson/4.16.0/adventure-text-serializer-gson-4.16.0.jar",
+    "sha256": "1c5aad0c17213e91b796ef13be2dfc4683f6d6f828834d6f41dda616ac00e37a"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-gson/5.2.0/adventure-text-serializer-gson-5.2.0.jar",
+    "sha256": "5b2ad1c8a65e7fa0811279b51a45d5fc574b6a6354097b545e4fdb5b68aaed73"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-commons/5.2.0/adventure-text-serializer-commons-5.2.0.jar",
+    "sha256": "64b3e45d93aa57f4da9b257d16c8f2172612d9e3312b061f4892fd426922d2c3"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-bungeecord/4.3.0/adventure-text-serializer-bungeecord-4.3.0.jar",
+    "sha256": "e1bc376c6dc7a2100016015735ce4ccc534d2b26bf5ab82aac751c5032056c39"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-bungeecord/4.3.2/adventure-text-serializer-bungeecord-4.3.2.jar",
+    "sha256": "e1bc376c6dc7a2100016015735ce4ccc534d2b26bf5ab82aac751c5032056c39"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-serializer-ansi/5.2.0/adventure-text-serializer-ansi-5.2.0.jar",
+    "sha256": "9229d090832e288018f3df69027602dcda253118358585dc2728f84597e9ca9d"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-minimessage/4.16.0/adventure-text-minimessage-4.16.0.jar",
+    "sha256": "7262cac14d80278ebf07c90142cb94abb24f1c93e638ac8f914351462fc11557"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-minimessage/5.2.0/adventure-text-minimessage-5.2.0.jar",
+    "sha256": "e1871aba1511dbe49cff211c10f85682886014161e5d629318aa69583c31a2c0"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-text-logger-slf4j/5.2.0/adventure-text-logger-slf4j-5.2.0.jar",
+    "sha256": "ae79b7f3846c5d973b37c7eec03190bd44e182918d1346e7705c5991a1b5dfb3"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-platform-viaversion/4.3.2/adventure-platform-viaversion-4.3.2.jar",
+    "sha256": "df463083060a51403df0cfe3e08e3c8890103bfc707e9235f6279e87c619753f"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-platform-facet/4.3.2/adventure-platform-facet-4.3.2.jar",
+    "sha256": "20f8e6db34d722a4acccbedcc9b6c02e8ee6b3cab9350b06ab3d1c0b0b8b454f"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-platform-bukkit/4.3.2/adventure-platform-bukkit-4.3.2.jar",
+    "sha256": "843c14ff24f78d3d5bdc4607450b8de5686a41812dbb514341b4f3120c7c2511"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-platform-api/4.3.2/adventure-platform-api-4.3.2.jar",
+    "sha256": "ec604628c2b7c165ea74c1fcb3a2d0f03359c2c77a14960e3a0bc2e379670ac2"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-nbt/4.13.1/adventure-nbt-4.13.1.jar",
+    "sha256": "a0a7a7f4428352d29696da9c8833093d5d16ddccf53ae88a35c76a0795e7358e"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-key/4.14.0/adventure-key-4.14.0.jar",
+    "sha256": "0b2bd74353932595c857af7d637210fb7819dfb1fc5b52a04eefb938ea847972"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-key/4.16.0/adventure-key-4.16.0.jar",
+    "sha256": "3505c6700b585c940b9a9bec418444a10404f6142e96509bde66a2c6453ca83c"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-key/5.2.0/adventure-key-5.2.0.jar",
+    "sha256": "0184d173200e2eef8fbc791f622d1d58fd459f8930c616b5a4fe79e83eda6c55"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-api/4.14.0/adventure-api-4.14.0.jar",
+    "sha256": "1d4cc85babc49917469362fdb4bcd28efbc81c86e52bf473d167ee97c0ec5c76"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-api/4.16.0/adventure-api-4.16.0.jar",
+    "sha256": "091c019a9184d2f47a46818ff9a63f681645b1d5ba5def1a5f48f0aa0863daec"
+  },
+  {
+    "path": "server/libraries/net/kyori/adventure-api/5.2.0/adventure-api-5.2.0.jar",
+    "sha256": "7e52fe7190be3e87b3b3f71712cfa12315fcd27109f302a7b440c12f01fae827"
+  },
+  {
+    "path": "server/libraries/io/papermc/paper/paper-api/26.3.build.244-stable/paper-api-26.3.build.244-stable.jar",
+    "sha256": "58b2a165c33a2cf18ab0c735102bafb7631581a99bafad475e5fbd2f553fe040"
+  },
+  {
+    "path": "server/libraries/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+    "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+  },
+  {
+    "path": "server/libraries/com/google/guava/guava/33.6.0-jre/guava-33.6.0-jre.jar",
+    "sha256": "dc573e1fca4fd5454f4a5fd3d7da2df03002876a4175bafc14a95980dd7713b3"
+  },
+  {
+    "path": "server/libraries/com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar",
+    "sha256": "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb"
+  },
+  {
+    "path": "server/plugins/CMI-9.8.11.2.jar",
+    "sha256": "e9b6e69d3fd617dc665160a2b0c044905a52c44b486b9c6a53677c340317887a"
+  },
+  {
+    "path": "server/plugins/CMILib1.6.1.3.jar",
+    "sha256": "856962ace9555b3425d91070cfc41dd1b64c416b21687466c24ecbef85a1d7ed"
+  },
+  {
+    "path": "server/plugins/CommandPanels-4.2.5.jar",
+    "sha256": "2308d96d258844aecea5a1da81143793e55dfca34435a0cd7def9dd60c224b9e"
+  },
+  {
+    "path": "server/plugins/MMOCore-1.13.1-20261012.174459-71.jar",
+    "sha256": "7057c4deeb177c3d73967334ad377d4d1d3af92a88c08c2f459149eb5366f60a"
+  },
+  {
+    "path": "server/plugins/MMOInventory-2.0-20261012.174733-38.jar",
+    "sha256": "efb10b6421739eb3df7f33490281af1893cfd03e513d4a573e55c312142f323c"
+  },
+  {
+    "path": "server/plugins/MMOItems-6.10.1-20261012.174833-69.jar",
+    "sha256": "35af073d81d86b7fa06ea59260152b4afb5a7724043bcddc7c8ee873b57d7f86"
+  },
+  {
+    "path": "server/plugins/ModelEngine-R4.2.0.jar",
+    "sha256": "1b85d44e2dc30b1be5c3827563be261273d4a41b535b5bdda7ff071ed6696ab1"
+  },
+  {
+    "path": "server/plugins/MythicLib-1.7.1-20261014.095819-18.jar",
+    "sha256": "683b17c95543c97787fd3e0ab39bfc36dda8725d7c2afcfa449f4b4cce319649"
+  },
+  {
+    "path": "server/plugins/MythicMobsPremium-5.14.1-SNAPSHOT.jar",
+    "sha256": "d83003a2e910d42df2939b1e5dea706e4d9b16837e63f6c72fb3b66195e117ad"
+  },
+  {
+    "path": "server/plugins/nexo-1.29.1.jar",
+    "sha256": "bb45239cef2890fe38073186fb082cb526394bff4fabf339980bc520a90798f8"
+  },
+  {
+    "path": "server/plugins/packetevents-spigot-2.14.0.jar",
+    "sha256": "060087c58ec268eae7dd0eb1f17ac3bea1eaadda1693414141ff64e506091bd7"
+  },
+  {
+    "path": "server/plugins/PlaceholderAPI-2.12.3.jar",
+    "sha256": "fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437"
+  },
+  {
+    "path": "server/plugins/VaultUnlocked-2.20.3.jar",
+    "sha256": "fbc6651aca11e13376c115df66eeffa79592e79517be398299aa6beb49c22695"
+  }
+]

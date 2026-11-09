@@ -1,0 +1,6 @@
+Portable public-dependency build: SUCCESS
+Original Java sources/resources byte-for-byte unchanged.
+No ../server dependency in default pom.xml.
+ru.azeroth.economy.LedgerTest: tests=36, failures=0, errors=0, skipped=0
+ru.azeroth.economy.MariaDbTest: tests=36, failures=0, errors=0, skipped=36
+ru.azeroth.economy.RestartTest: tests=3, failures=0, errors=0, skipped=0

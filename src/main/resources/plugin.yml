@@ -1,0 +1,73 @@
+name: AzerothEconomy
+version: 1.0.0
+main: ru.azeroth.economy.AzerothEconomy
+api-version: '26.3'
+author: Azeroth
+load: POSTWORLD
+softdepend: [Vault, PlaceholderAPI]
+loadbefore: [MMOCore, MMOItems, CMI, CommandPanels]
+commands:
+  aeconomy:
+    description: Экономика Азерота
+    usage: /aeconomy help
+permissions:
+  azeroth.use:
+    default: true
+  azeroth.balance:
+    default: true
+  azeroth.pay:
+    default: true
+  azeroth.exchange:
+    default: true
+  azeroth.history:
+    default: true
+  azeroth.bank:
+    default: true
+  azeroth.bank.buy:
+    default: true
+  azeroth.bank.rename:
+    default: true
+  azeroth.bank.money:
+    default: true
+  azeroth.mail:
+    default: true
+  azeroth.mail.send:
+    default: true
+  azeroth.mail.claim:
+    default: true
+  azeroth.trade:
+    default: true
+  azeroth.auction:
+    default: true
+  azeroth.auction.sell:
+    default: true
+  azeroth.auction.buy:
+    default: true
+  azeroth.deposit:
+    default: true
+  azeroth.withdraw:
+    default: true
+  azeroth.cheque:
+    default: true
+  azeroth.admin.money:
+    default: op
+  azeroth.admin.reward:
+    default: op
+  azeroth.admin.npc:
+    default: op
+  azeroth.admin.diagnose:
+    default: op
+  azeroth.admin.backup:
+    default: op
+  azeroth.admin.recovery:
+    default: op
+  azeroth.bank.remote:
+    default: op
+  azeroth.mail.remote:
+    default: op
+  azeroth.guild:
+    default: true
+  azeroth.guild.create:
+    default: op
+  azeroth.bank.xp:
+    default: true

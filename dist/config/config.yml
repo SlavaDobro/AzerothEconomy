@@ -1,0 +1,152 @@
+# AzerothEconomy — все денежные настройки в минимальных единицах.
+# gold: 1 единица = 1 медная; 100 медных = 1 серебряная; 10000 = 1 золотая.
+# Внутри Vault тоже 1 медная. Других провайдеров включать нельзя.
+vault:
+  enabled: true
+# Короткие алиасы по умолчанию отсутствуют. Занятые команды не перехватываются.
+aliases: []
+units: {g: 10000, s: 100, c: 1, з: 10000, с: 100, м: 1, зол: 10000, сер: 100, мед: 1}
+modules:
+  bank: true
+  mail: true
+  trade: true
+  auction: true
+  bank-money: false
+  xp: false
+  physical: false
+  guild: false
+  interest: false
+  schedules: false
+  mob-rewards: false
+  death-loss: false
+currencies:
+  gold:
+    name: Монеты
+    symbol: м
+    icon: GOLD_NUGGET
+    precision: 0
+    start: 0
+    limit: 1000000000000
+    transfer: true
+    trade: true
+    physical: true
+    permission: ''
+  honor:
+    name: Честь
+    symbol: чести
+    icon: IRON_SWORD
+    precision: 0
+    start: 0
+    limit: 75000
+    transfer: false
+    trade: false
+    physical: false
+    permission: ''
+  arena:
+    name: Очки арены
+    symbol: арены
+    icon: DIAMOND_SWORD
+    precision: 0
+    start: 0
+    limit: 5000
+    transfer: false
+    trade: false
+    physical: false
+    permission: ''
+  dungeon:
+    name: Жетоны подземелий
+    symbol: жет.
+    icon: AMETHYST_SHARD
+    precision: 0
+    start: 0
+    limit: 10000
+    transfer: false
+    trade: false
+    physical: false
+    permission: ''
+# Курс задаётся в минимальных единицах выходной валюты / входной.
+# Результат FLOOR, комиссия удерживается до FLOOR. Прибыльные циклы запрещены.
+# Пример: gold: {event: {numerator: 1, denominator: 100, fee-bps: 100}}
+exchange: {}
+transfer:
+  minimum: 1
+  fee-bps: 0
+bank:
+  remote: true
+  max-tabs: 9
+  tab-price: 10000
+  slots-price: 1000
+mail:
+  remote: true
+  fee: 0
+  delay-seconds: 0
+  lifetime-days: 30
+trade:
+  distance: 8
+  timeout-seconds: 180
+  countdown-seconds: 3
+auction:
+  duration-hours: 48
+  deposit: 100
+  fee-bps: 500
+# Периодические выплаты: постоянный ключ + номер периода, без повторов при рестарте.
+# from: UUID или MINT (явное создание); to: UUID; amount: минимальные единицы.
+schedules: {}
+mob-rewards:
+  amounts: {}
+death-loss:
+  bps: 100
+# Никогда не включать тестовый режим на основном сервере.
+testing:
+  self-test: false
+  stop-after-tests: false
+help:
+  - '&6/aeconomy — кошелёк, банк, почта, торговля, аукцион'
+  - '&eСумма: 12345 = 12345 медных; 1g 23s 45c = 1з 23с 45м.'
+  - '&7В mail send используйте слитную сумму 1g23s45c; прочие валюты — десятичное число.'
+  - '&f/aeconomy pay <ник/UUID> <валюта> <сумма>'
+  - '&f/aeconomy exchange <из> <в> <сумма>'
+  - '&f/aeconomy bank [open <номер> | rename <номер> <MATERIAL> <имя>]'
+  - '&f/aeconomy bank store <номер> <ID предмета> — из получения в банк'
+  - '&f/aeconomy bank deposit|withdraw <валюта> <сумма> — денежный счёт'
+  - '&f/aeconomy deposit — сохранить предмет из руки; inbox — забрать предметы'
+  - '&f/aeconomy mail attach <ID> | clear — вложения следующего письма'
+  - '&f/aeconomy mail send <ник> <валюта> <сумма> <COD> <тема>|<текст>'
+  - '&f/aeconomy trade <ник> | accept | cancel | money <валюта> <сумма>'
+  - '&f/aeconomy auction sell <цена> | search <материал> | mine'
+  - '&f/aeconomy history [страница]'
+  - '&f/aeconomy cheque issue <валюта> <сумма> | redeem'
+  - '&cАдмин: give|take|set <ник/UUID> <валюта> <сумма>'
+  - '&cАдмин: reward <ID операции UUID> <ник/UUID> <валюта> <сумма> <тема> <текст>'
+  - '&cАдмин: diagnose | backup | recovery [ID database|inventory]'
+  - '&cNPC (консоль): aeconomy npc bank|mail <ник>'
+
+# Общий денежный банк: независимые роли; не синхронизирует гильдии MMOCore.
+guild:
+  daily-limit: 10000
+  daily-items: 9
+interest:
+  period-seconds: 86400
+  bps: 10
+  max-per-period: 1000
+
+# MariaDB требует отдельную пустую схему и единственный экземпляр плагина.
+# Переключение backend НЕ переносит данные автоматически.
+storage:
+  type: sqlite
+  url: 'jdbc:mariadb://127.0.0.1:3306/azeroth'
+  user: azeroth
+  password-env: AE_DB_PASSWORD
+
+xp:
+  limit: 1000000
+
+# Nexo ID для иконки кнопки по MATERIAL; подписи остаются текстовыми.
+nexo-icons: {}
+
+money-format: "{g} з {s} с {c} м"
+
+limits:
+  player-mails: 100
+  custody-items: 500
+  listings: 50
