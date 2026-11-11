@@ -11,6 +11,18 @@ commands:
   aeconomy:
     description: Экономика Азерота
     usage: /aeconomy help
+  mounts:
+    description: Коллекция маунтов
+    aliases: [mount]
+    permission: terrawow.mounts
+  pets:
+    description: Коллекция питомцев
+    aliases: [pet]
+    permission: terrawow.pets
+  twm:
+    description: TerraWoWmain — администрирование коллекции маунтов и питомцев
+    usage: /twm
+    permission: terrawow.admin
 permissions:
   azeroth.use:
     default: true
@@ -72,3 +84,9 @@ permissions:
     default: op
   azeroth.bank.xp:
     default: true
+  terrawow.mounts:
+    default: true
+  terrawow.pets:
+    default: true
+  terrawow.admin:
+    default: op

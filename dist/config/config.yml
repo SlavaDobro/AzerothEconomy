@@ -19,6 +19,8 @@ modules:
   schedules: false
   mob-rewards: false
   death-loss: false
+  # Коллекция маунтов и питомцев (collections.yml), команды /mounts /pets /twm
+  collections: true
 currencies:
   gold:
     name: Монеты

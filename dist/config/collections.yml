@@ -1,0 +1,60 @@
+# TerraWoWmain — коллекция маунтов и питомцев (как журнал коллекций в WoW).
+#
+# Каждый маунт/питомец — моб MythicMobs с моделью ModelEngine. Облик (skin) — другой моб MythicMobs
+# для того же маунта/питомца (своя модель, окраска, эффекты). Первый облик в списке — основной.
+#
+# Моб маунта сам сажает хозяина в седло:   mountmodel{mid=<модель>;m=flying|walking;d=true;delay=2} @owner
+# (плагин делает игрока владельцем моба). Без всадника моб должен убирать себя сам (modelhasdriver false).
+#
+# free: true      — есть у всех игроков сразу; иначе выдаётся командой /twm give <ник> mount|pet <id> [облик]
+# icon            — MATERIAL, nexo:<id> или mmo:<TYPE>:<ID>
+
+summon:
+  mount-cast-seconds: 3      # призыв маунта, как в WoW; движение прерывает
+  pet-cast-seconds: 0        # питомцы появляются сразу
+  move-tolerance: 1.0        # на сколько блоков можно сдвинуться во время призыва
+
+pet-follow:
+  follow-distance: 3.0       # дальше этого питомец идёт к хозяину
+  teleport-distance: 20.0    # дальше этого (или в другом мире) — телепорт к хозяину
+  speed: 1.3                 # скорость следования (множитель)
+  resummon-on-join: true     # последний питомец возвращается после входа и возрождения
+
+mounts:
+  invincible:
+    name: '<#A335EE>Непобедимый'
+    mode: flying
+    icon: 'nexo:wf_icon_mount_invincible'
+    free: false
+    source: 'Король-лич (25 игроков, героический)'
+    lore:
+    - 'Знаменитый скакун Артаса Менетила,'
+    - 'что служит хозяину и в жизни, и в смерти.'
+    skins:
+      default:
+        name: '<#A335EE>Непобедимый'
+        mob: WF_Mount_Invincible
+      spectral:
+        name: '<#7FB8FF>Призрачный Непобедимый'
+        mob: WF_Mount_Invincible_Spectral
+        lore:
+        - 'Бледное сияние Ледяной Короны.'
+
+pets:
+  murky:
+    name: '<#1EFF00>Мурки'
+    icon: TROPICAL_FISH
+    free: true
+    source: 'Мурлоки Элвиннского леса'
+    lore:
+    - 'Маленький мурлок. Мргл-мргл!'
+    skins:
+      default:
+        name: '<#1EFF00>Мурки'
+        mob: WF_Pet_Murky
+      golden:
+        name: '<#FFD100>Золотой Мурки'
+        mob: WF_Pet_Murky_Golden
+        icon: GOLD_NUGGET
+        lore:
+        - 'Сверкает, как монета в фонтане.'

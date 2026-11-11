@@ -23,6 +23,7 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
   public Custody custody;
   public Menus menus;
   public Commands commands;
+  public ru.terrawow.main.collection.CollectionModule collections;
   private Database db;
   private ThreadPoolExecutor worker;
   private YamlConfiguration messages;
@@ -180,6 +181,14 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
       }
       Bukkit.getScheduler().runTaskTimer(this, this::tick, 20, 20);
       for (Player pl : Bukkit.getOnlinePlayers()) register(pl);
+      if (getConfig().getBoolean("modules.collections", true))
+        try { // mounts & pets; a broken collections.yml must not stop the economy
+          collections = new ru.terrawow.main.collection.CollectionModule(this);
+          collections.enable();
+        } catch (Exception e) {
+          collections = null;
+          getLogger().log(java.util.logging.Level.SEVERE, "Коллекция маунтов и питомцев не запущена", e);
+        }
       getLogger()
           .info("SQLite готова; Vault=1 медная; владелец=UUID аккаунта. " + ledger.diagnostics());
       if (getConfig().getBoolean("testing.self-test"))
@@ -213,6 +222,7 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
 
   @Override
   public void onDisable() {
+    if (collections != null) collections.disable();
     economyHealthy = false;
     Bukkit.getServicesManager().unregisterAll(this);
     for (Player pl : Bukkit.getOnlinePlayers())
