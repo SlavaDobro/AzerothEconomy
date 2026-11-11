@@ -53,6 +53,7 @@
 |---|---|---|
 | Журнал маунтов | `/mounts` (`/mount`) | `terrawow.mounts` (true) |
 | Журнал питомцев | `/pets` (`/pet`) | `terrawow.pets` (true) |
+| Разблокировать маунта со всеми обликами | `/twm unlock <id\|all> [ник]` (без ника — себе) | `terrawow.admin` (op) |
 | Выдать / забрать | `/twm give\|take <ник> <mount\|pet> <id> [облик]` | `terrawow.admin` (op) |
 | Список, журнал игроку | `/twm list`, `/twm open <mounts\|pets> <ник>` | `terrawow.admin` |
 | Призвать / отозвать | `/twm summon <ник> <mount\|pet> <id>`, `/twm dismiss <ник> <mount\|pet>` | `terrawow.admin` |

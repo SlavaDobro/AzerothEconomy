@@ -68,6 +68,19 @@ final class Mythic {
     e.remove();
   }
 
+  /** MythicMobs mob ID of the entity, or null for a vanilla entity / no MythicMobs. */
+  static String mobId(Entity e) {
+    try {
+      Object h = helper();
+      Object active = h.getClass().getMethod("getMythicMobInstance", Entity.class).invoke(h, e);
+      if (active == null) return null;
+      Object type = active.getClass().getMethod("getType").invoke(active);
+      return (String) type.getClass().getMethod("getInternalName").invoke(type);
+    } catch (Exception ex) {
+      return null;
+    }
+  }
+
   static Optional<Entity> find(UUID id) {
     return Optional.ofNullable(id == null ? null : Bukkit.getEntity(id)).filter(Entity::isValid);
   }

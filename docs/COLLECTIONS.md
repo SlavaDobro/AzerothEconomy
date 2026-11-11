@@ -35,7 +35,10 @@ mounts:
     mode: flying                    # flying | walking — только для подписи в журнале
     icon: 'nexo:wf_icon_mount_invincible'   # MATERIAL, nexo:<id> или mmo:TYPE:ID
     free: false                     # true — есть у всех без выдачи
-    source: 'Король-лич (25, героический)'
+    source: 'Тест: убейте обычного зомби'
+    unlock:                         # получить за убийство; можно и у отдельного облика
+      kill: [ZOMBIE]                # ID моба MythicMobs или тип сущности Minecraft
+      chance: 100                   # шанс в %
     lore: ['...']
     skins:                          # первый облик — базовый, приходит вместе с маунтом
       default: {name: '...', mob: WF_Mount_Invincible}
@@ -43,6 +46,8 @@ mounts:
 pets:
   murky: {..., skins: {default: {mob: WF_Pet_Murky}, golden: {mob: WF_Pet_Murky_Golden}}}
 ```
+
+**Получение за убийство (`unlock`).** Убийца сразу получает маунта/питомца (или облик), видит сообщение и слышит звук. Тип Minecraft (`ZOMBIE`) срабатывает только на обычных мобах, а не на мобах MythicMobs с той же основой: наши мурлоки сделаны на ZOMBIE, но не считаются зомби. Чтобы облик падал с мурлоков, пишите `kill: [WF_Murloc]`. Сейчас для теста Непобедимый выдаётся за первого убитого зомби, со 100% шансом. Облик «Призрачный» за зомби не выдаётся.
 
 Каждый облик — отдельный моб MythicMobs: своя модель, оттенок (`tint`) или эффекты. Мобы для моделей команды создаёт `tools/install_mount.py` из папки библиотеки сервера: `WF_Mount_<Id>[_<Облик>]` и `WF_Pet_<Id>[_<Облик>]`. Если моба нет, в консоли при запуске будет `Коллекция: нет моба MythicMobs …`.
 
@@ -54,6 +59,7 @@ pets:
 |---|---|---|
 | Журнал маунтов | `/mounts` (`/mount`) | `terrawow.mounts` (true) |
 | Журнал питомцев | `/pets` (`/pet`) | `terrawow.pets` (true) |
+| Разблокировать маунта со всеми обликами | `/twm unlock <id\|all> [ник]` (без ника — себе) | `terrawow.admin` (op) |
 | Выдать / забрать | `/twm give\|take <ник> <mount\|pet> <id> [облик]` | `terrawow.admin` (op) |
 | Список ID | `/twm list` | `terrawow.admin` |
 | Открыть журнал игроку | `/twm open <mounts\|pets> <ник>` | `terrawow.admin` |

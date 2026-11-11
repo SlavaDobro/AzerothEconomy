@@ -342,6 +342,44 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
       }, 40);
   }
 
+  /** "unlock: {kill: [...]}" in collections.yml: the killer gets the mount/pet or skin. */
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void kill(org.bukkit.event.entity.EntityDeathEvent e) {
+    Player killer = e.getEntity().getKiller();
+    if (killer == null || e.getEntity() instanceof Player) return;
+    String mythic = Mythic.mobId(e.getEntity());
+    String type = e.getEntity().getType().name();
+    PlayerCollection c = of(killer.getUniqueId());
+    boolean changed = false;
+    for (Kind k : Kind.values())
+      for (Entry en : config.all(k)) {
+        if (!en.free() && !c.owns(en) && rolls(en.unlock(), mythic, type)) {
+          c.owned.add(en.key());
+          changed = true;
+          announce(killer, en, null);
+        }
+        for (Skin s : en.skins().values())
+          if (!c.ownsSkin(en, s) && rolls(s.unlock(), mythic, type)) {
+            c.skins.add(en.key() + ":" + s.id());
+            c.owned.add(en.key());
+            changed = true;
+            announce(killer, en, s);
+          }
+      }
+    if (changed) save(c);
+  }
+
+  private static boolean rolls(Unlock u, String mythic, String type) {
+    return u != null && u.matches(mythic, type) && Math.random() * 100 < u.chance();
+  }
+
+  private void announce(Player p, Entry e, Skin s) {
+    String what = s == null ? e.name() : s.name();
+    msg(p, "<#FFD100>✦ Новое в коллекции" + (s == null ? " (" + e.kind().ru + ")" : " (облик)") + ": &r" + what);
+    msg(p, "&7Откройте &f/" + (e.kind() == Kind.MOUNT ? "mounts" : "pets") + "&7, чтобы призвать.");
+    p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.2f);
+  }
+
   @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
   public void teleport(PlayerTeleportEvent e) {
     Player p = e.getPlayer();
@@ -372,6 +410,7 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
   private void admin(CommandSender s, String[] a) {
     if (a.length == 0) {
       s.sendMessage(Text.c("&6/twm give|take <ник> <mount|pet> <id> [skin] &7— выдать/забрать"));
+      s.sendMessage(Text.c("&6/twm unlock <id|all> [ник] &7— разблокировать маунта со всеми обликами (без ника — себе)"));
       s.sendMessage(Text.c("&6/twm list <ник> &7— коллекция игрока"));
       s.sendMessage(Text.c("&6/twm open <mounts|pets> <ник> &7— открыть меню (для консоли/панелей)"));
       s.sendMessage(Text.c("&6/twm summon <ник> <mount|pet> <id> &7| &6/twm dismiss <ник> <mount|pet>"));
@@ -422,6 +461,24 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
         Player online = target.getPlayer();
         if (online != null && give) msg(online, "&6✦ В вашу коллекцию добавлено: " + (a.length >= 5 ? e.skins().get(a[4]).name() : e.name()));
       }
+      case "unlock" -> {
+        // /twm unlock <id|all> [ник] — маунт со всеми обликами; без ника — себе
+        need(a, 2);
+        OfflinePlayer target = a.length >= 3 ? offline(a[2]) : player(s);
+        List<Entry> list = a[1].equalsIgnoreCase("all")
+            ? new ArrayList<>(config.all(Kind.MOUNT))
+            : List.of(config.get(Kind.MOUNT, a[1].toLowerCase(Locale.ROOT)));
+        PlayerCollection c = of(target.getUniqueId());
+        for (Entry e : list) {
+          c.owned.add(e.key());
+          for (Skin sk : e.skins().values()) c.skins.add(e.key() + ":" + sk.id());
+        }
+        save(c);
+        String names = String.join("&7, ", list.stream().map(Entry::name).toList());
+        s.sendMessage(Text.c("&aРазблокировано для " + target.getName() + ": &r" + names + " &7(со всеми обликами)"));
+        Player online = target.getPlayer();
+        if (online != null && online != s) msg(online, "&6✦ В вашу коллекцию добавлено: &r" + names);
+      }
       case "list" -> {
         need(a, 2);
         OfflinePlayer target = offline(a[1]);
@@ -456,16 +513,23 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
   public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
     if (!cmd.getName().equals("twm")) return List.of();
     List<String> out = switch (a.length) {
-      case 1 -> List.of("give", "take", "list", "open", "summon", "dismiss", "reload");
+      case 1 -> List.of("give", "take", "unlock", "list", "open", "summon", "dismiss", "reload");
       case 2 -> a[0].equals("open") ? List.of("mounts", "pets")
+          : a[0].equals("unlock") ? unlockIds()
           : Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
-      case 3 -> a[0].equals("open") ? Bukkit.getOnlinePlayers().stream().map(Player::getName).toList()
+      case 3 -> a[0].equals("open") || a[0].equals("unlock") ? Bukkit.getOnlinePlayers().stream().map(Player::getName).toList()
           : List.of("mount", "pet");
-      case 4 -> safeIds(a[2]);
-      case 5 -> safeSkins(a[2], a[3]);
+      case 4 -> a[0].equals("unlock") ? List.of() : safeIds(a[2]);
+      case 5 -> a[0].equals("unlock") ? List.of() : safeSkins(a[2], a[3]);
       default -> List.of();
     };
     return out.stream().filter(x -> x.toLowerCase(Locale.ROOT).startsWith(a[a.length - 1].toLowerCase(Locale.ROOT))).toList();
+  }
+
+  private List<String> unlockIds() {
+    List<String> ids = new ArrayList<>(config.entries.get(Kind.MOUNT).keySet());
+    ids.add("all");
+    return ids;
   }
 
   private List<String> safeIds(String kind) {

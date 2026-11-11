@@ -65,6 +65,23 @@ class CollectionTest {
   }
 
   @Test
+  void unlockOnKill() throws Exception {
+    CollectionConfig c = bundled();
+    var u = c.get(Kind.MOUNT, "invincible").unlock();
+    assertNotNull(u, "test rule: Invincible from a zombie");
+    assertEquals(100.0, u.chance());
+    assertTrue(u.matches(null, "ZOMBIE"), "vanilla zombie");
+    assertFalse(u.matches("WF_Murloc", "ZOMBIE"), "ZOMBIE-based MythicMobs mob is not a zombie");
+    assertFalse(u.matches(null, "SKELETON"));
+    assertNull(c.get(Kind.PET, "murky").unlock());
+    var y = new YamlConfiguration();
+    y.loadFromString("pets:\n  x:\n    skins:\n      a: {mob: A}\n      b: {mob: B, unlock: {kill: [wf_murloc], chance: 250}}\n");
+    var skin = new CollectionConfig(y).get(Kind.PET, "x").skins().get("b").unlock();
+    assertTrue(skin.matches("WF_Murloc", "ZOMBIE"), "MythicMobs IDs are case-insensitive");
+    assertEquals(100.0, skin.chance(), "chance is capped at 100");
+  }
+
+  @Test
   void playerDataRoundTrip() throws Exception {
     UUID id = UUID.randomUUID();
     PlayerCollection p = new PlayerCollection(id);

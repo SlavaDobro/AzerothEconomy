@@ -24,8 +24,27 @@ public final class CollectionConfig {
     }
   }
 
+  /**
+   * "unlock: {kill: [...], chance: %}": killing one of these gives the entry/skin. A name is a
+   * MythicMobs mob ID or a vanilla entity type; a vanilla type only matches non-MythicMobs entities,
+   * so ZOMBIE means ordinary zombies, not our ZOMBIE-based murlocs.
+   */
+  public record Unlock(Set<String> kill, double chance) {
+    public boolean matches(String mythicId, String vanillaType) {
+      return mythicId != null ? kill.contains(mythicId.toUpperCase(Locale.ROOT)) : kill.contains(vanillaType.toUpperCase(Locale.ROOT));
+    }
+
+    static Unlock read(ConfigurationSection s) {
+      if (s == null) return null;
+      Set<String> kill = new LinkedHashSet<>();
+      for (String k : s.getStringList("kill")) kill.add(k.trim().toUpperCase(Locale.ROOT));
+      if (kill.isEmpty()) return null;
+      return new Unlock(Collections.unmodifiableSet(kill), Math.max(0, Math.min(100, s.getDouble("chance", 100))));
+    }
+  }
+
   /** One look of a mount/pet: a separate MythicMobs mob (own model, tint, effects). */
-  public record Skin(String id, String name, String mob, String icon, boolean free, List<String> lore) {}
+  public record Skin(String id, String name, String mob, String icon, boolean free, List<String> lore, Unlock unlock) {}
 
   public record Entry(
       Kind kind,
@@ -36,7 +55,8 @@ public final class CollectionConfig {
       boolean free,
       String source,
       List<String> lore,
-      LinkedHashMap<String, Skin> skins) {
+      LinkedHashMap<String, Skin> skins,
+      Unlock unlock) {
     public Skin defaultSkin() {
       return skins.values().iterator().next();
     }
@@ -95,12 +115,12 @@ public final class CollectionConfig {
       skins.put(
           skinId,
           new Skin(skinId, x.getString("name", name), mob, x.getString("icon", icon),
-              x.getBoolean("free", first), x.getStringList("lore")));
+              x.getBoolean("free", first), x.getStringList("lore"), Unlock.read(x.getConfigurationSection("unlock"))));
       first = false;
     }
     String mode = s.getString("mode", kind == Kind.MOUNT ? "walking" : "follow");
     return new Entry(kind, id, name, icon, mode, s.getBoolean("free", false), s.getString("source", ""),
-        s.getStringList("lore"), skins);
+        s.getStringList("lore"), skins, Unlock.read(s.getConfigurationSection("unlock")));
   }
 
   public Entry get(Kind kind, String id) {
