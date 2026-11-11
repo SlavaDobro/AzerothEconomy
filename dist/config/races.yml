@@ -1,0 +1,363 @@
+# TerraWoWmain — расы Азерота (Альянс и Орда).
+#
+# Игрок выбирает фракцию, расу и пол при первом входе. Сменить расу может только админ:
+#   /race set <ник> <раса> [male|female]  ·  /race reset <ник>
+# При смене расы всё старое снимается (рост, пассивки, скин) и ставится новое.
+#
+# passives — постоянные бонусы расы. У каждого бонуса:
+#   stat:       стат MythicLib/MMOCore (MAX_HEALTH, MAX_MANA, HEALTH_REGENERATION, MANA_REGENERATION,
+#               CRITICAL_STRIKE_CHANCE, DODGE_RATING, PHYSICAL_DAMAGE, MAGIC_DAMAGE, MAGIC_DAMAGE_REDUCTION,
+#               ICE_DEFENSE_PERCENT, EARTH_DEFENSE_PERCENT, DARKNESS_DEFENSE_PERCENT, FIRE_DEFENSE_PERCENT …)
+#     amount + type: relative (проценты: 5 = +5%) или flat (число)
+#   attribute:  атрибут Minecraft (knockback_resistance, oxygen_bonus, block_break_speed, safe_fall_distance,
+#               movement_speed, attack_speed …)
+#     amount + operation: add_number | add_multiplied_base | add_multiplied_total
+#   Без stat/attribute бонус только описывается (для атмосферы).
+#
+# racial — активная расовая способность (/racial). actions выполняются по порядку:
+#   cleanse  {effects: [SLOWNESS, POISON …]}               снять эффекты
+#   effect   {effects: ['RESISTANCE 1 8']}                  наложить на себя: тип, уровень, секунды
+#   area     {radius: 5, effects: [...], players: false}    на врагов вокруг (игроков — только при players: true)
+#   heal     {percent: 20, seconds: 15}                     лечение % от макс. здоровья (seconds 0 — сразу)
+#   mana     {percent: 10}                                  мана MMOCore
+#   velocity {forward: 1.4, up: 0.8}                        рывок
+#   safe-fall {seconds: 5}                                  без урона от падения
+#   stealth  {seconds: 30}                                  невидимость, пока стоите на месте и не атакуете
+#   sound    {sound: entity.player.levelup, volume: 1, pitch: 1}
+#   particle {particle: cloud, count: 30, spread: 0.6}
+#
+# scale — рост (1.0 = обычный игрок). Женские персонажи — scale × settings.female-scale.
+# classes — какие классы MMOCore доступны расе (ID файлов MMOCore/classes). Класс, которого нет
+#   ни у одной расы (например, особые классы), доступен всем.
+# skins — подписанные скины (value + signature с mineskin.org); при выборе расы берётся случайный.
+#   Обычно их не пишут сюда вручную: tools/sign_race_skins.py кладёт их в race-skins.yml рядом
+#   (формат: <раса>: {male: [{name, value, signature}], female: [...]}); оба списка складываются.
+
+settings:
+  open-on-join: true          # первый вход без расы — сразу окно выбора
+  force-choice: true          # окно открывается снова, пока раса не выбрана (кроме terrawow.admin)
+  class-rules: true           # ограничение классов по расе
+  # консольная команда после выбора расы, если у игрока ещё нет класса ({player} — ник)
+  after-choice-command: 'mmocore:class {player}'
+  default-class: human        # стартовый «пустой» класс MMOCore
+  female-scale: 0.96
+
+class-names:
+  warrior: '<#C79C6E>Воин'
+  paladin: '<#F58CBA>Паладин'
+  hunter: '<#ABD473>Охотник'
+  rogue: '<#FFF569>Разбойник'
+  priest: '<#FFFFFF>Жрец'
+  shaman: '<#0070DE>Шаман'
+  mage: '<#69CCF0>Маг'
+  warlock: '<#9482C9>Чернокнижник'
+  druid: '<#FF7D0A>Друид'
+
+factions:
+  alliance:
+    name: '<#3F7FFF>Альянс'
+    icon: BLUE_BANNER
+    lore:
+    - 'Союз королевств, верных чести,'
+    - 'свету и древним клятвам.'
+  horde:
+    name: '<#C41F3B>Орда'
+    icon: RED_BANNER
+    lore:
+    - 'Братство изгнанников и воинов,'
+    - 'закалённых в борьбе за выживание.'
+
+races:
+  # ======================================================================= Альянс
+  human:
+    faction: alliance
+    name: '<#3F7FFF>Человек'
+    icon-male: 'nexo:wf_race_human_male'
+    icon-female: 'nexo:wf_race_human_female'
+    scale: 1.0
+    lore:
+    - 'Стойкие жители Штормграда.'
+    - 'Их сила — в единстве и воле к победе.'
+    classes: [warrior, paladin, hunter, rogue, priest, mage, warlock]
+    passives:
+    - {name: 'Человеческий дух', text: '+10% к восполнению маны', stat: MANA_REGENERATION, amount: 10, type: relative}
+    - {name: 'Мастер оружия', text: '+1% к шансу крит. удара', stat: CRITICAL_STRIKE_CHANCE, amount: 1, type: flat}
+    - {name: 'Дипломатия', text: 'Умение находить общий язык'}
+    racial:
+      name: 'Каждый за себя'
+      text: ['Снимает замедление, слепоту, слабость,', 'тошноту и яд.']
+      cooldown: 180
+      actions:
+      - {type: cleanse, effects: [SLOWNESS, MINING_FATIGUE, WEAKNESS, BLINDNESS, NAUSEA, DARKNESS, LEVITATION, POISON]}
+      - {type: sound, sound: entity.player.levelup, volume: 0.6, pitch: 1.4}
+      - {type: particle, particle: end_rod, count: 25, spread: 0.6}
+    skins: {male: [], female: []}
+
+  dwarf:
+    faction: alliance
+    name: '<#3F7FFF>Дворф'
+    icon-male: 'nexo:wf_race_dwarf_male'
+    icon-female: 'nexo:wf_race_dwarf_female'
+    scale: 0.8
+    lore:
+    - 'Суровые горняки Стальгорна,'
+    - 'мастера кузни и пороха.'
+    classes: [warrior, paladin, hunter, rogue, priest, shaman, mage, warlock]
+    passives:
+    - {name: 'Морозостойкость', text: '+10% защиты от льда', stat: ICE_DEFENSE_PERCENT, amount: 10, type: flat}
+    - {name: 'Горное дело', text: '+15% к скорости добычи', attribute: block_break_speed, amount: 0.15, operation: add_multiplied_base}
+    - {name: 'Крепкая кость', text: '+10% к сопротивлению отбрасыванию', attribute: knockback_resistance, amount: 0.1, operation: add_number}
+    racial:
+      name: 'Каменная форма'
+      text: ['Снимает яды и болезни,', 'урон по вам −20% на 8 сек.']
+      cooldown: 120
+      actions:
+      - {type: cleanse, effects: [POISON, WITHER, HUNGER, NAUSEA]}
+      - {type: effect, effects: ['RESISTANCE 1 8']}
+      - {type: sound, sound: block.stone.place, volume: 1, pitch: 0.6}
+      - {type: particle, particle: crit, count: 30, spread: 0.6}
+    skins: {male: [], female: []}
+
+  nightelf:
+    faction: alliance
+    name: '<#3F7FFF>Ночной эльф'
+    icon-male: 'nexo:wf_race_nightelf_male'
+    icon-female: 'nexo:wf_race_nightelf_female'
+    scale: 1.12
+    lore:
+    - 'Древний народ лесов Тельдрассила,'
+    - 'хранители природы и луны.'
+    classes: [warrior, hunter, rogue, priest, mage, druid]
+    passives:
+    - {name: 'Быстрота', text: '+2% к уклонению', stat: DODGE_RATING, amount: 2, type: flat}
+    - {name: 'Лёгкий шаг', text: '+3% к скорости передвижения', attribute: movement_speed, amount: 0.03, operation: add_multiplied_total}
+    - {name: 'Сопротивление природе', text: '+10% защиты от сил земли', stat: EARTH_DEFENSE_PERCENT, amount: 10, type: flat}
+    racial:
+      name: 'Слиться с тенью'
+      text: ['Невидимость, пока вы стоите на месте', 'и не атакуете (до 30 сек.).']
+      cooldown: 120
+      actions:
+      - {type: stealth, seconds: 30}
+      - {type: sound, sound: entity.illusioner.cast_spell, volume: 0.6, pitch: 1.2}
+      - {type: particle, particle: squid_ink, count: 25, spread: 0.5}
+    skins: {male: [], female: []}
+
+  gnome:
+    faction: alliance
+    name: '<#3F7FFF>Гном'
+    icon-male: 'nexo:wf_race_gnome_male'
+    icon-female: 'nexo:wf_race_gnome_female'
+    scale: 0.62
+    lore:
+    - 'Изобретатели Гномрегана:'
+    - 'маленький рост, огромный ум.'
+    classes: [warrior, rogue, priest, mage, warlock]
+    passives:
+    - {name: 'Пытливый ум', text: '+5% к запасу маны', stat: MAX_MANA, amount: 5, type: relative}
+    - {name: 'Сопротивление магии', text: '−5% урона от магии', stat: MAGIC_DAMAGE_REDUCTION, amount: 5, type: flat}
+    - {name: 'Лёгкость', text: 'Безопасная высота падения +1 блок', attribute: safe_fall_distance, amount: 1, operation: add_number}
+    racial:
+      name: 'Мастер побега'
+      text: ['Снимает замедление и путы,', 'короткий прилив скорости.']
+      cooldown: 90
+      actions:
+      - {type: cleanse, effects: [SLOWNESS, MINING_FATIGUE, LEVITATION, WEAKNESS]}
+      - {type: effect, effects: ['SPEED 2 3']}
+      - {type: sound, sound: block.piston.extend, volume: 0.8, pitch: 1.6}
+      - {type: particle, particle: poof, count: 20, spread: 0.4}
+    skins: {male: [], female: []}
+
+  draenei:
+    faction: alliance
+    name: '<#3F7FFF>Дреней'
+    icon-male: 'nexo:wf_race_draenei_male'
+    icon-female: 'nexo:wf_race_draenei_female'
+    scale: 1.12
+    lore:
+    - 'Изгнанники с далёкого Аргуса,'
+    - 'несущие свет наару.'
+    classes: [warrior, paladin, hunter, priest, shaman, mage]
+    passives:
+    - {name: 'Героическое присутствие', text: '+1% к шансу крит. удара', stat: CRITICAL_STRIKE_CHANCE, amount: 1, type: flat}
+    - {name: 'Сопротивление тьме', text: '+10% защиты от тьмы', stat: DARKNESS_DEFENSE_PERCENT, amount: 10, type: flat}
+    - {name: 'Ювелирное дело', text: 'Чутьё на драгоценные камни'}
+    racial:
+      name: 'Дар наару'
+      text: ['Восстанавливает 20% здоровья', 'за 15 сек.']
+      cooldown: 180
+      actions:
+      - {type: heal, percent: 20, seconds: 15}
+      - {type: sound, sound: block.amethyst_block.chime, volume: 1, pitch: 1.2}
+      - {type: particle, particle: happy_villager, count: 20, spread: 0.6}
+    skins: {male: [], female: []}
+
+  worgen:
+    faction: alliance
+    name: '<#3F7FFF>Ворген'
+    icon-male: 'nexo:wf_race_worgen_male'
+    icon-female: 'nexo:wf_race_worgen_female'
+    scale: 1.08
+    lore:
+    - 'Жители Гилнеаса, проклятые'
+    - 'звериной сущностью и обуздавшие её.'
+    classes: [warrior, hunter, rogue, priest, mage, warlock, druid]
+    passives:
+    - {name: 'Звериная хватка', text: '+1% к шансу крит. удара', stat: CRITICAL_STRIKE_CHANCE, amount: 1, type: flat}
+    - {name: 'Стойкость к порче', text: '+5% защиты от тьмы', stat: DARKNESS_DEFENSE_PERCENT, amount: 5, type: flat}
+    - {name: 'Стойкость к природе', text: '+5% защиты от сил земли', stat: EARTH_DEFENSE_PERCENT, amount: 5, type: flat}
+    racial:
+      name: 'Бегство во тьме'
+      text: ['Скорость бега сильно растёт', 'на 10 сек.']
+      cooldown: 120
+      actions:
+      - {type: effect, effects: ['SPEED 3 10']}
+      - {type: sound, sound: entity.wolf.howl, volume: 0.8, pitch: 0.9}
+      - {type: particle, particle: smoke, count: 25, spread: 0.5}
+    skins: {male: [], female: []}
+
+  # ======================================================================= Орда
+  orc:
+    faction: horde
+    name: '<#C41F3B>Орк'
+    icon-male: 'nexo:wf_race_orc_male'
+    icon-female: 'nexo:wf_race_orc_female'
+    scale: 1.04
+    lore:
+    - 'Свирепые воины Оргриммара,'
+    - 'чтящие честь и силу.'
+    classes: [warrior, hunter, rogue, shaman, mage, warlock]
+    passives:
+    - {name: 'Твёрдость', text: '+15% к сопротивлению отбрасыванию', attribute: knockback_resistance, amount: 0.15, operation: add_number}
+    - {name: 'Мастерство топора', text: '+3% к физическому урону', stat: PHYSICAL_DAMAGE, amount: 3, type: flat}
+    - {name: 'Командир', text: 'Ведёт за собой в бой'}
+    racial:
+      name: 'Кровавое неистовство'
+      text: ['Сила атаки растёт', 'на 15 сек.']
+      cooldown: 120
+      actions:
+      - {type: effect, effects: ['STRENGTH 1 15']}
+      - {type: sound, sound: entity.ravager.roar, volume: 0.7, pitch: 1.1}
+      - {type: particle, particle: angry_villager, count: 10, spread: 0.6}
+    skins: {male: [], female: []}
+
+  undead:
+    faction: horde
+    name: '<#C41F3B>Нежить'
+    icon-male: 'nexo:wf_race_scourge_male'
+    icon-female: 'nexo:wf_race_scourge_female'
+    scale: 0.95
+    lore:
+    - 'Отрекшиеся: восставшие из мёртвых,'
+    - 'сбросившие волю Короля-лича.'
+    classes: [warrior, hunter, rogue, priest, mage, warlock]
+    passives:
+    - {name: 'Подводное дыхание', text: 'Дольше не нужен воздух под водой', attribute: oxygen_bonus, amount: 4, operation: add_number}
+    - {name: 'Сопротивление тьме', text: '+10% защиты от тьмы', stat: DARKNESS_DEFENSE_PERCENT, amount: 10, type: flat}
+    - {name: 'Каннибализм', text: 'Не брезгует ничем'}
+    racial:
+      name: 'Воля Отрекшихся'
+      text: ['Снимает страх, слепоту,', 'тошноту и замедление.']
+      cooldown: 120
+      actions:
+      - {type: cleanse, effects: [BLINDNESS, DARKNESS, NAUSEA, SLOWNESS, WEAKNESS]}
+      - {type: sound, sound: entity.wither.ambient, volume: 0.4, pitch: 1.6}
+      - {type: particle, particle: soul, count: 20, spread: 0.5}
+    skins: {male: [], female: []}
+
+  tauren:
+    faction: horde
+    name: '<#C41F3B>Таурен'
+    icon-male: 'nexo:wf_race_tauren_male'
+    icon-female: 'nexo:wf_race_tauren_female'
+    scale: 1.22
+    lore:
+    - 'Миролюбивые великаны Мулгора,'
+    - 'живущие в гармонии с Матерью-землёй.'
+    classes: [warrior, paladin, hunter, priest, shaman, druid]
+    passives:
+    - {name: 'Выносливость', text: '+5% к здоровью', stat: MAX_HEALTH, amount: 5, type: relative}
+    - {name: 'Сопротивление природе', text: '+10% защиты от сил земли', stat: EARTH_DEFENSE_PERCENT, amount: 10, type: flat}
+    - {name: 'Могучее телосложение', text: '+20% к сопротивлению отбрасыванию', attribute: knockback_resistance, amount: 0.2, operation: add_number}
+    racial:
+      name: 'Громовая поступь'
+      text: ['Оглушает врагов вокруг', '(5 блоков) на 2 сек.']
+      cooldown: 120
+      actions:
+      - {type: area, radius: 5, effects: ['SLOWNESS 7 2', 'WEAKNESS 2 2']}
+      - {type: sound, sound: entity.generic.explode, volume: 0.6, pitch: 0.7}
+      - {type: particle, particle: explosion, count: 3, spread: 1.5}
+    skins: {male: [], female: []}
+
+  troll:
+    faction: horde
+    name: '<#C41F3B>Тролль'
+    icon-male: 'nexo:wf_race_troll_male'
+    icon-female: 'nexo:wf_race_troll_female'
+    scale: 1.1
+    lore:
+    - 'Племя Чёрного Копья —'
+    - 'ловкие охотники и знатоки вуду.'
+    classes: [warrior, hunter, rogue, priest, shaman, mage, warlock, druid]
+    passives:
+    - {name: 'Регенерация', text: '+10% к восстановлению здоровья', stat: HEALTH_REGENERATION, amount: 10, type: relative}
+    - {name: 'Убийство зверей', text: 'Опытный охотник'}
+    - {name: 'Метание', text: 'Знаток дальнего боя'}
+    racial:
+      name: 'Берсерк'
+      text: ['Скорость атаки растёт', 'на 10 сек.']
+      cooldown: 180
+      actions:
+      - {type: effect, effects: ['HASTE 2 10']}
+      - {type: sound, sound: entity.evoker.prepare_attack, volume: 0.7, pitch: 1.3}
+      - {type: particle, particle: flame, count: 20, spread: 0.5}
+    skins: {male: [], female: []}
+
+  bloodelf:
+    faction: horde
+    name: '<#C41F3B>Эльф крови'
+    icon-male: 'nexo:wf_race_bloodelf_male'
+    icon-female: 'nexo:wf_race_bloodelf_female'
+    scale: 1.0
+    lore:
+    - 'Наследники Кель''Таласа,'
+    - 'черпающие силу из магии.'
+    classes: [warrior, paladin, hunter, rogue, priest, mage, warlock]
+    passives:
+    - {name: 'Чародейское родство', text: '+3% к магическому урону', stat: MAGIC_DAMAGE, amount: 3, type: flat}
+    - {name: 'Сопротивление магии', text: '−5% урона от магии', stat: MAGIC_DAMAGE_REDUCTION, amount: 5, type: flat}
+    - {name: 'Зачарование', text: 'Чувствует потоки магии'}
+    racial:
+      name: 'Волшебный поток'
+      text: ['Восстанавливает 10% маны и ослабляет', 'врагов вокруг (8 блоков).']
+      cooldown: 120
+      actions:
+      - {type: mana, percent: 10}
+      - {type: area, radius: 8, effects: ['WEAKNESS 2 3', 'SLOWNESS 2 2']}
+      - {type: sound, sound: block.beacon.power_select, volume: 0.8, pitch: 1.6}
+      - {type: particle, particle: enchant, count: 60, spread: 1.2}
+    skins: {male: [], female: []}
+
+  goblin:
+    faction: horde
+    name: '<#C41F3B>Гоблин'
+    icon-male: 'nexo:wf_race_goblin_male'
+    icon-female: 'nexo:wf_race_goblin_female'
+    scale: 0.66
+    lore:
+    - 'Предприимчивые торговцы и изобретатели'
+    - 'картеля Трюмных Вод.'
+    classes: [warrior, hunter, rogue, priest, shaman, mage, warlock]
+    passives:
+    - {name: 'Время — деньги', text: '+3% к скорости атаки', attribute: attack_speed, amount: 0.03, operation: add_multiplied_total}
+    - {name: 'Лучшая цена', text: 'Торгуется до последней монеты'}
+    - {name: 'Алхимия', text: 'Знает толк в зельях'}
+    racial:
+      name: 'Ракетный прыжок'
+      text: ['Рывок вперёд на ракетном ранце,', 'без урона от падения.']
+      cooldown: 60
+      actions:
+      - {type: velocity, forward: 1.5, up: 0.8}
+      - {type: safe-fall, seconds: 5}
+      - {type: sound, sound: entity.firework_rocket.launch, volume: 1, pitch: 1}
+      - {type: particle, particle: flame, count: 30, spread: 0.3}
+    skins: {male: [], female: []}

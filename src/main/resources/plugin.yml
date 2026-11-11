@@ -19,6 +19,13 @@ commands:
     description: Коллекция питомцев
     aliases: [pet]
     permission: terrawow.pets
+  race:
+    description: Раса персонажа (выбор при первом входе; администратор — set/reset/info/open/reload)
+    usage: /race
+    permission: terrawow.race
+  racial:
+    description: Расовая способность
+    permission: terrawow.race
   twm:
     description: TerraWoWmain — администрирование коллекции маунтов и питомцев
     usage: /twm
@@ -85,6 +92,8 @@ permissions:
   azeroth.bank.xp:
     default: true
   terrawow.mounts:
+    default: true
+  terrawow.race:
     default: true
   terrawow.pets:
     default: true

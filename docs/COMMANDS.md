@@ -60,3 +60,14 @@
 | Перечитать collections.yml | `/twm reload` | `terrawow.admin` |
 
 Подробности: [COLLECTIONS.md](COLLECTIONS.md).
+
+## Расы
+
+| Действие | Команда | Право |
+|---|---|---|
+| Карточка расы / создание персонажа | `/race` | `terrawow.race` (true) |
+| Расовая способность | `/racial` | `terrawow.race` |
+| Поставить / сбросить расу | `/race set <ник> <раса> [male\|female]`, `/race reset <ник>` | `terrawow.admin` (op) |
+| Узнать, открыть выбор, перечитать | `/race info [ник]`, `/race open <ник>`, `/race reload` | `terrawow.admin` |
+
+Подробности: [RACES.md](RACES.md).

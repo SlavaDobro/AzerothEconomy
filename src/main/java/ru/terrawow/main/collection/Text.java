@@ -4,12 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** "&a", "&#RRGGBB" and "<#RRGGBB>" -> section codes for item names, lore and titles. */
-final class Text {
+public final class Text {
   private Text() {}
 
   private static final Pattern HEX = Pattern.compile("(?:&#|<#)([0-9A-Fa-f]{6})>?");
 
-  static String c(String s) {
+  public static String c(String s) {
     if (s == null) return "";
     Matcher m = HEX.matcher(s);
     StringBuilder out = new StringBuilder();

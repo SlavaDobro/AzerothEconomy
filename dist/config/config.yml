@@ -21,6 +21,8 @@ modules:
   death-loss: false
   # Коллекция маунтов и питомцев (collections.yml), команды /mounts /pets /twm
   collections: true
+  # Расы Азерота (races.yml): выбор фракции, расы и пола, рост, пассивки, /racial, классы по расам
+  races: true
 currencies:
   gold:
     name: Монеты
