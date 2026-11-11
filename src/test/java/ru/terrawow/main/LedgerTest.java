@@ -1,7 +1,7 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.azeroth.economy.Database.*;
+import static ru.terrawow.main.Database.*;
 
 import java.nio.file.*;
 import java.util.*;

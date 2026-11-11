@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 /** Obtain through Bukkit ServicesManager. Amounts always use integer minimum units. */
 public final class EconomyApi {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
 
-  EconomyApi(AzerothEconomy p) {
+  EconomyApi(TerraWoWmain p) {
     this.p = p;
   }
 

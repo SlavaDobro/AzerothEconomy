@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -36,9 +36,9 @@ public final class MariaDbStorage implements StorageDialect {
   public void configure(Connection c) throws Exception {
     try (Statement s = c.createStatement()) {
       try (ResultSet r =
-          s.executeQuery("SELECT GET_LOCK(CONCAT('AzerothEconomy:',DATABASE()),0)")) {
+          s.executeQuery("SELECT GET_LOCK(CONCAT('TerraWoWmain:',DATABASE()),0)")) {
         if (!r.next() || r.getInt(1) != 1)
-          throw new IllegalStateException("Общая БД уже занята другим экземпляром AzerothEconomy");
+          throw new IllegalStateException("Общая БД уже занята другим экземпляром TerraWoWmain");
       }
       s.execute("SET SESSION innodb_lock_wait_timeout=1");
       s.execute("SET NAMES utf8mb4");
@@ -130,7 +130,7 @@ public final class MariaDbStorage implements StorageDialect {
   public void close() throws Exception {
     if (connection != null && !connection.isClosed())
       try (Statement s = connection.createStatement()) {
-        s.execute("DO RELEASE_LOCK(CONCAT('AzerothEconomy:',DATABASE()))");
+        s.execute("DO RELEASE_LOCK(CONCAT('TerraWoWmain:',DATABASE()))");
       }
   }
 }

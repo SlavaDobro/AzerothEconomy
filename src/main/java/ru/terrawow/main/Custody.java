@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -15,10 +15,10 @@ import org.bukkit.inventory.*;
  * automatically.
  */
 public final class Custody implements Listener {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
   public final Set<UUID> busy = new HashSet<>();
 
-  public Custody(AzerothEconomy p) {
+  public Custody(TerraWoWmain p) {
     this.p = p;
   }
 

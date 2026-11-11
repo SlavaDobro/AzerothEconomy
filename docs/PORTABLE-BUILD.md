@@ -1,6 +1,6 @@
 # Сборка на другом компьютере
 
-Весь код AzerothEconomy находится в `src/main/java`; тесты — в `src/test/java`; русские ресурсы — в `src/main/resources`. Клонирование репозитория или Download ZIP переносит полный проект. Каталоги server, world, playerdata и тестовые БД не являются исходниками плагина и не нужны для обычной сборки.
+Весь код TerraWoWmain находится в `src/main/java`; тесты — в `src/test/java`; русские ресурсы — в `src/main/resources`. Клонирование репозитория или Download ZIP переносит полный проект. Каталоги server, world, playerdata и тестовые БД не являются исходниками плагина и не нужны для обычной сборки.
 
 ## Требования
 
@@ -14,7 +14,7 @@ Windows: `./build.ps1`. Linux/macOS: `chmod +x mvnw build.sh && ./build.sh`.
 
 Скрипты скачивают PlaceholderAPI 2.12.3 в игнорируемую папку `.build-deps`, проверяют `deps/placeholderapi.sha256` и запускают Maven Wrapper. Paper API 26.3.build.244-stable и VaultAPI 1.7 — provided-зависимости Maven, их классы в JAR плагина не включаются. Закрытые Nexo/MMOItems API в compile classpath не нужны: интеграция использует публичные методы установленных плагинов через reflection.
 
-После подготовки PlaceholderAPI можно запускать `mvnw clean verify` непосредственно. Выходной JAR — `target/AzerothEconomy-1.0.0.jar`. Тесты, требующие живого MariaDB, без отдельного флага пропускаются; обычные SQLite/JVM тесты выполняются.
+После подготовки PlaceholderAPI можно запускать `mvnw clean verify` непосредственно. Выходной JAR — `target/TerraWoWmain-1.1.0.jar`. Тесты, требующие живого MariaDB, без отдельного флага пропускаются; обычные SQLite/JVM тесты выполняются.
 
 ## Первоначальная сборка сервера
 

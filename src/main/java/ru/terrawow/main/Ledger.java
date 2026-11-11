@@ -1,6 +1,6 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
-import static ru.azeroth.economy.Database.*;
+import static ru.terrawow.main.Database.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

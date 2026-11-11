@@ -1,6 +1,6 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
-import static ru.azeroth.economy.Database.*;
+import static ru.terrawow.main.Database.*;
 
 import java.util.*;
 import org.bukkit.*;
@@ -11,10 +11,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public final class Commands implements CommandExecutor, TabCompleter {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
   private final Map<UUID, List<String>> attachments = new HashMap<>();
 
-  public Commands(AzerothEconomy p) {
+  public Commands(TerraWoWmain p) {
     this.p = p;
   }
 
@@ -577,8 +577,11 @@ public final class Commands implements CommandExecutor, TabCompleter {
     if (a[1].equals("redeem")) {
       ItemStack item = pl.getInventory().getItemInMainHand();
       if (!item.hasItemMeta()) throw new IllegalArgumentException("Это не чек");
-      String id =
-          item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+      var pdc = item.getItemMeta().getPersistentDataContainer();
+      String current = pdc.get(key, PersistentDataType.STRING);
+      // cheques issued before the rename (the plugin was called AzerothEconomy)
+      String id = current != null ? current
+          : pdc.get(new NamespacedKey("azerotheconomy", "cheque"), PersistentDataType.STRING);
       if (id == null) throw new IllegalArgumentException("Это не чек");
       update(pl, () -> p.ledger.redeemVoucher(id, owner));
       return;

@@ -1,12 +1,12 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 
 public final class Placeholders extends PlaceholderExpansion {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
 
-  public Placeholders(AzerothEconomy p) {
+  public Placeholders(TerraWoWmain p) {
     this.p = p;
   }
 
@@ -15,7 +15,7 @@ public final class Placeholders extends PlaceholderExpansion {
   }
 
   public String getAuthor() {
-    return "Azeroth";
+    return "TerraWoW";
   }
 
   public String getVersion() {

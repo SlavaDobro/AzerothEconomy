@@ -1,8 +1,9 @@
-name: AzerothEconomy
-version: 1.0.0
-main: ru.azeroth.economy.AzerothEconomy
+name: TerraWoWmain
+version: 1.1.0
+main: ru.terrawow.main.TerraWoWmain
 api-version: '26.3'
-author: Azeroth
+author: TerraWoW
+description: Основной плагин сервера TerraWoW (экономика Азерота и будущие системы)
 load: POSTWORLD
 softdepend: [Vault, PlaceholderAPI]
 loadbefore: [MMOCore, MMOItems, CMI, CommandPanels]

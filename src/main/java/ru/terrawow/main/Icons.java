@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import org.bukkit.*;
 import org.bukkit.inventory.*;

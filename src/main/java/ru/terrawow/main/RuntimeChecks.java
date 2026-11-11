@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.lang.reflect.Proxy;
 import java.nio.file.*;
@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 /** Isolated runtime checks; proxy inventories, real Paper serialization and plugin APIs. */
 final class RuntimeChecks {
-  static void run(AzerothEconomy p) {
+  static void run(TerraWoWmain p) {
     List<String> results = new ArrayList<>();
     Map<String, byte[]> originals = new LinkedHashMap<>();
     try {
@@ -76,7 +76,7 @@ final class RuntimeChecks {
           throw new AssertionError("codec " + e.getKey());
       results.add("PASS Paper binary roundtrip: " + originals.keySet());
       var vault = Bukkit.getServicesManager().load(net.milkbowl.vault.economy.Economy.class);
-      if (vault == null || !vault.getName().equals("AzerothEconomy"))
+      if (vault == null || !vault.getName().equals("TerraWoWmain"))
         throw new AssertionError("Vault provider");
       results.add("PASS single Vault provider " + vault.getName());
       var test = Bukkit.getOfflinePlayer(UUID.fromString("11111111-1111-1111-1111-111111111111"));
@@ -183,7 +183,7 @@ final class RuntimeChecks {
         });
   }
 
-  private static void testClicks(AzerothEconomy p, List<String> results) {
+  private static void testClicks(TerraWoWmain p, List<String> results) {
     UUID uuid = UUID.randomUUID();
     Player pl =
         (Player)
@@ -253,7 +253,7 @@ final class RuntimeChecks {
             + " left click (proxy player)");
   }
 
-  private static void finish(AzerothEconomy p, List<String> results) {
+  private static void finish(TerraWoWmain p, List<String> results) {
     try {
       Files.write(p.getDataFolder().toPath().resolve("runtime-tests.txt"), results);
     } catch (Exception e) {

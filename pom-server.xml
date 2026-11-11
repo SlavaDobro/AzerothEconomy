@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion><groupId>ru.azeroth</groupId><artifactId>AzerothEconomy</artifactId><version>1.0.0</version>
+<modelVersion>4.0.0</modelVersion><groupId>ru.terrawow</groupId><artifactId>TerraWoWmain</artifactId><version>1.1.0</version>
 <properties><maven.compiler.release>25</maven.compiler.release><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding><project.build.outputTimestamp>2026-11-09T12:00:00Z</project.build.outputTimestamp></properties>
 <dependencies><dependency><groupId>org.mariadb.jdbc</groupId><artifactId>mariadb-java-client</artifactId><version>3.5.2</version></dependency><dependency><groupId>local.verified</groupId><artifactId>api-0</artifactId><version>1</version><scope>system</scope><systemPath>${project.basedir}/../server/libraries/software/amazon/awssdk/annotations/2.32.4/annotations-2.32.4.jar</systemPath></dependency>
 <dependency><groupId>local.verified</groupId><artifactId>api-1</artifactId><version>1</version><scope>system</scope><systemPath>${project.basedir}/../server/libraries/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar</systemPath></dependency>

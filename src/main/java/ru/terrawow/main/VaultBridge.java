@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.util.*;
 import net.milkbowl.vault.economy.*;
@@ -6,10 +6,10 @@ import org.bukkit.*;
 
 /** Legacy Vault API on VaultUnlocked. One Vault unit is ONE COPPER, precision zero. */
 public final class VaultBridge implements Economy {
-  private final AzerothEconomy plugin;
+  private final TerraWoWmain plugin;
   private final Ledger l;
 
-  public VaultBridge(AzerothEconomy p) {
+  public VaultBridge(TerraWoWmain p) {
     plugin = p;
     l = p.ledger;
   }
@@ -55,7 +55,7 @@ public final class VaultBridge implements Economy {
   }
 
   public String getName() {
-    return "AzerothEconomy";
+    return "TerraWoWmain";
   }
 
   public boolean hasBankSupport() {

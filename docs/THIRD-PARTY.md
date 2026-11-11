@@ -6,6 +6,6 @@
 - https://github.com/mariadb-corporation/mariadb-connector-j/tree/3.5.2
 - https://www.slf4j.org/license.html
 
-MariaDB test server 11.4.5 скачан отдельно из официального архива с проверкой SHA-256 и не входит в JAR/ZIP исходников. Установленные Paper/плагины используются как предоставляемые сервером API; они не включены в JAR AzerothEconomy. Maven Wrapper предоставлен Apache Maven Wrapper 3.3.2, Maven 3.9.9 (Apache-2.0). Форматирование исходников выполнено google-java-format 1.37.0; форматировщик не нужен для запуска сервера.
+MariaDB test server 11.4.5 скачан отдельно из официального архива с проверкой SHA-256 и не входит в JAR/ZIP исходников. Установленные Paper/плагины используются как предоставляемые сервером API; они не включены в JAR TerraWoWmain. Maven Wrapper предоставлен Apache Maven Wrapper 3.3.2, Maven 3.9.9 (Apache-2.0). Форматирование исходников выполнено google-java-format 1.37.0; форматировщик не нужен для запуска сервера.
 
-AzerothEconomy — самостоятельный код этого проекта. Закрытые исходники, оформление и платные ресурсы UltraEconomy не использованы.
+TerraWoWmain — самостоятельный код этого проекта. Закрытые исходники, оформление и платные ресурсы UltraEconomy не использованы.

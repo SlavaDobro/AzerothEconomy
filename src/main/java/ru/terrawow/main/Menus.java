@@ -1,6 +1,6 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
-import static ru.azeroth.economy.Database.*;
+import static ru.terrawow.main.Database.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -12,10 +12,10 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Menus implements Listener {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
   public final Map<String, Long> localAccess = new HashMap<>();
 
-  public Menus(AzerothEconomy p) {
+  public Menus(TerraWoWmain p) {
     this.p = p;
   }
 

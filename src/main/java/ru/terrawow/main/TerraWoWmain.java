@@ -1,6 +1,6 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
-import static ru.azeroth.economy.Database.*;
+import static ru.terrawow.main.Database.*;
 
 import java.io.*;
 import java.util.*;
@@ -18,7 +18,7 @@ import org.bukkit.event.server.*;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class AzerothEconomy extends JavaPlugin implements Listener {
+public final class TerraWoWmain extends JavaPlugin implements Listener {
   public Ledger ledger;
   public Custody custody;
   public Menus menus;
@@ -31,6 +31,28 @@ public final class AzerothEconomy extends JavaPlugin implements Listener {
   private VaultBridge vault;
   public Map<String, Long> units = new HashMap<>();
   private final Map<String, Long> countdown = new HashMap<>();
+
+  /** Folder name of this plugin before it became TerraWoWmain (1.0.0 was called AzerothEconomy). */
+  static final String LEGACY_NAME = "AzerothEconomy";
+
+  @Override
+  public void onLoad() {
+    // One-time move of the old data folder (database, configs, backups) so balances, bank and mail stay.
+    File legacy = new File(getDataFolder().getParentFile(), LEGACY_NAME);
+    if (!getDataFolder().exists() && legacy.isDirectory()) {
+      try {
+        java.nio.file.Files.move(legacy.toPath(), getDataFolder().toPath());
+        getLogger().info("Данные перенесены: plugins/" + LEGACY_NAME + " → plugins/" + getName());
+      } catch (IOException e) {
+        throw new IllegalStateException(
+            "Не удалось перенести plugins/" + LEGACY_NAME + " в plugins/" + getName()
+                + ". Остановите сервер и перенесите папку вручную.", e);
+      }
+    } else if (getDataFolder().exists() && legacy.isDirectory()) {
+      getLogger().warning("Найдены обе папки: plugins/" + LEGACY_NAME + " и plugins/" + getName()
+          + ". Используется plugins/" + getName() + "; старую папку проверьте и удалите вручную.");
+    }
+  }
 
   @Override
   public void onEnable() {
@@ -115,7 +137,7 @@ public final class AzerothEconomy extends JavaPlugin implements Listener {
               TimeUnit.SECONDS,
               new ArrayBlockingQueue<>(512),
               r -> {
-                Thread t = new Thread(r, "AzerothEconomy-storage");
+                Thread t = new Thread(r, "TerraWoWmain-storage");
                 t.setDaemon(true);
                 return t;
               });
@@ -149,7 +171,7 @@ public final class AzerothEconomy extends JavaPlugin implements Listener {
         getServer()
             .getCommandMap()
             .register(
-                "azerotheconomy",
+                "terrawowmain",
                 new Command(alias) {
                   public boolean execute(CommandSender s, String label, String[] a) {
                     return commands.onCommand(s, this, label, a);

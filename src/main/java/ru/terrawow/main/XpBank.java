@@ -1,4 +1,4 @@
-package ru.azeroth.economy;
+package ru.terrawow.main;
 
 import java.util.*;
 import org.bukkit.*;
@@ -7,9 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Vanilla points only. Refuses MMOCore XP redirection or overlay. */
 public final class XpBank {
-  private final AzerothEconomy p;
+  private final TerraWoWmain p;
 
-  public XpBank(AzerothEconomy p) {
+  public XpBank(TerraWoWmain p) {
     this.p = p;
   }
 

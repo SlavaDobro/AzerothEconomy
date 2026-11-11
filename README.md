@@ -1,6 +1,14 @@
-# AzerothEconomy 1.0.0
+# TerraWoWmain 1.1.0
 
-[Скачать JAR 1.0.0](https://github.com/SlavaDobro/AzerothEconomy/raw/refs/heads/main/dist/AzerothEconomy-1.0.0.jar) · [Архив исходников](https://github.com/SlavaDobro/AzerothEconomy/raw/refs/heads/main/dist/AzerothEconomy-1.0.0-sources.zip) · [Отчёт тестов](docs/TESTS.md)
+> **TerraWoWmain — основной плагин сервера TerraWoW.** До версии 1.1.0 он назывался **AzerothEconomy**.
+> Сейчас в нём экономика Азерота; дальше сюда будут добавляться другие системы сервера.
+>
+> При первом запуске 1.1.0 папка `plugins/AzerothEconomy` (БД, конфиги, резервные копии) автоматически
+> переносится в `plugins/TerraWoWmain` — балансы, банк, почта и аукцион сохраняются. Чеки, выданные
+> версией 1.0.0, по-прежнему принимаются. Для совместимости **не менялись**: права `azeroth.*`,
+> команда `/aeconomy`, плейсхолдеры `%aeconomy_…%`, формат БД.
+
+[Скачать JAR 1.1.0](https://github.com/SlavaDobro/AzerothEconomy/raw/refs/heads/main/dist/TerraWoWmain-1.1.0.jar) · [Архив исходников](https://github.com/SlavaDobro/AzerothEconomy/raw/refs/heads/main/dist/TerraWoWmain-1.1.0-sources.zip) · [Отчёт тестов](docs/TESTS.md)
 
 Самостоятельный плагин экономики для установленного Paper 26.3 build 244. Интерфейс на русском. Основной баланс — **целое число медных монет**, владелец — UUID аккаунта. 100 медных = 1 серебряная, 100 серебряных = 1 золотая. UltraEconomy использован только как ориентир функций; его код, оформление и ресурсы не использованы.
 
@@ -41,7 +49,7 @@ chmod +x mvnw build.sh
 ./build.sh
 ```
 
-Результат: `target/AzerothEconomy-1.0.0.jar`. Уже собранный и проверенный на сервере JAR находится в `dist/`, готовые конфиги — в `dist/config/`.
+Результат: `target/TerraWoWmain-1.1.0.jar`. Уже собранный и проверенный на сервере JAR находится в `dist/`, готовые конфиги — в `dist/config/`.
 
 Maven Wrapper 3.3.2 загружает Maven 3.9.9 с проверкой SHA-256. Paper API закреплён на `26.3.build.244-stable`; Vault API загружается из публичного Maven-репозитория. PlaceholderAPI 2.12.3 загружается скриптом из официального GitHub Release с проверкой SHA-256 (его Maven-репозиторий при публикации отвечал HTTP 403). После первого запуска скрипта можно использовать `./mvnw.cmd clean verify` или `./mvnw clean verify` напрямую. Подробности: [переносимая сборка](docs/PORTABLE-BUILD.md).
 
@@ -53,9 +61,9 @@ Maven Wrapper 3.3.2 загружает Maven 3.9.9 с проверкой SHA-256
 
 1. Остановить сервер штатной командой `stop`, убедиться, что процесс завершён.
 2. Скопировать резервную копию **всей** папки сервера, особенно world/playerdata, плагины, конфиги и БД. Не заменять JAR в работающей сборке.
-3. Скопировать JAR в `server/plugins`. Конфиги появятся в `server/plugins/AzerothEconomy`: `config.yml`, `messages.yml`, `ui.yml`.
+3. Скопировать JAR в `server/plugins`. Конфиги появятся в `server/plugins/TerraWoWmain`: `config.yml`, `messages.yml`, `ui.yml`.
 4. CMI `Economy.Enabled` оставить `false`. Другие провайдеры экономики не включать. `/money`, `/balance`, `/pay`, `/bank`, `/mail` плагин по умолчанию не регистрирует. Использовать `/aeconomy`.
-5. Запустить `server/start.bat`. Проверить консоль: AzerothEconomy включён, `aeconomy diagnose` сообщает integrity=ok и единственного провайдера AzerothEconomy.
+5. Запустить `server/start.bat`. Проверить консоль: TerraWoWmain включён, `aeconomy diagnose` сообщает integrity=ok и единственного провайдера TerraWoWmain.
 
 Порядок загрузки: после Vault/PlaceholderAPI, до MMOCore/MMOItems/CMI. Если другой Economy уже зарегистрирован, запуск прекращается. Если второй провайдер появляется позже, собственные пользовательские операции блокируются. После исправления нужен полный перезапуск; `/reload` не поддерживается.
 
