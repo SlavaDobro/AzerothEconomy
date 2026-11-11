@@ -68,7 +68,7 @@ final class CollectionMenus implements Listener {
       if (!e.source().isBlank()) lore.add("&7Где получить: &f" + e.source());
       if (kind == Kind.MOUNT && has)
         lore.addAll(e.mode().equals("flying")
-            ? List.of("", "&7Пробел — вверх, Shift — вниз,", "&7Shift на земле — спешиться.")
+            ? List.of("", "&7Пробел — взлететь и вверх, Shift — вниз.", "&7Приземлились — снова бег.", "&7Shift на земле — спешиться.")
             : List.of("", "&7Пробел — прыжок, Shift — спешиться."));
       lore.add("");
       if (!has) lore.add("&c✘ Не получено");

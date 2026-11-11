@@ -21,8 +21,8 @@ import ru.terrawow.main.collection.CollectionConfig.*;
  * Collection module of TerraWoWmain: mounts and pets (MythicMobs + ModelEngine mobs) with skins.
  *
  * <ul>
- *   <li>Mount: cast (default 3 s, moving cancels), the mob spawns with the player as owner and puts
- *       the owner into the saddle itself ({@code mountmodel ... @owner}). One mount per player.
+ *   <li>Mount: cast (default 3 s, moving cancels), the mob spawns with the player as owner and
+ *       the plugin seats the owner with its own controller ({@link MountControl}). One mount per player.
  *   <li>Pet: one per player, follows the owner, comes back after teleport, death and re-login.
  *   <li>Skin: another MythicMobs mob for the same mount/pet; the choice is saved per player.
  * </ul>
@@ -143,6 +143,11 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
       msg(p, "&cСначала сойдите с текущего транспорта.");
       return;
     }
+    if (e.kind() == Kind.MOUNT && !grounded(p) && !mountOf(p).map(Entity::isOnGround).orElse(false)) {
+      // like WoW: no summoning while flying or falling (in the saddle on the ground is fine)
+      msg(p, "&cНельзя призвать маунта в воздухе. Сначала приземлитесь.");
+      return;
+    }
     dismiss(p, e.kind(), false);
     Skin skin = c.skinOf(e);
     double seconds = e.kind() == Kind.MOUNT ? config.mountCastSeconds : config.petCastSeconds;
@@ -187,6 +192,11 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
         p.playSound(now, Sound.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.2f);
         return;
       }
+      if (e.kind() == Kind.MOUNT && (p.isFlying() || p.isGliding())) {
+        stop("&cПризыв прерван: вы оторвались от земли.");
+        p.playSound(now, Sound.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.2f);
+        return;
+      }
       t += 2;
       int cells = 10, filled = Math.min(cells, t * cells / total);
       bar(p, "&6Призыв: " + skin.name() + "  &8[&e" + "■".repeat(filled) + "&8" + "■".repeat(cells - filled) + "&8] &f"
@@ -208,14 +218,24 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
     }
   }
 
+  /** On the ground (or a block right under the feet): not flying, gliding, falling or swimming. */
+  static boolean grounded(Player p) {
+    if (p.isFlying() || p.isGliding() || p.isSwimming() || p.isInsideVehicle()) return false;
+    // the client's on-ground flag, or a solid block right under the feet
+    return ((Entity) p).isOnGround() || p.getLocation().subtract(0, 0.25, 0).getBlock().getType().isSolid();
+  }
+
   private void spawn(Player p, Entry e, Skin skin) {
     try {
       Location at = p.getLocation();
+      if (e.kind() == Kind.MOUNT && p.isFlying()) p.setFlying(false);
       if (e.kind() == Kind.PET) at = at.clone().add(at.getDirection().setY(0).normalize().multiply(-1.2));
       Entity mob = Mythic.spawn(skin.mob(), at, p.getUniqueId());
       mob.getPersistentDataContainer().set(key("entry"), org.bukkit.persistence.PersistentDataType.STRING, e.id());
       mob.getPersistentDataContainer().set(key("owner"), org.bukkit.persistence.PersistentDataType.STRING, p.getUniqueId().toString());
       (e.kind() == Kind.MOUNT ? mounts : pets).put(p.getUniqueId(), mob.getUniqueId());
+      if (e.kind() == Kind.MOUNT) // our WoW controller (MountControl); the model needs 2 ticks to appear
+        Bukkit.getScheduler().runTaskLater(plugin, () -> seat(p, e, mob), 2);
       if (e.kind() == Kind.PET) {
         PlayerCollection c = of(p.getUniqueId());
         c.lastPet = e.id();
@@ -225,6 +245,19 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
     } catch (Exception ex) {
       msg(p, "&cНе удалось призвать: " + ex.getMessage());
       plugin.getLogger().log(Level.WARNING, "Коллекция: призыв " + e.key() + "/" + skin.id(), ex);
+    }
+  }
+
+  private void seat(Player p, Entry e, Entity mob) {
+    if (!p.isOnline() || !mob.isValid() || !mob.getUniqueId().equals(mounts.get(p.getUniqueId()))) return;
+    try {
+      if (!MountControl.mount(p, mob, e.mode().equals("flying"), plugin.getLogger()))
+        throw new IllegalStateException("ModelEngine не посадил игрока");
+    } catch (RuntimeException ex) {
+      mounts.remove(p.getUniqueId());
+      Mythic.remove(mob);
+      msg(p, "&cНе удалось сесть на маунта: " + ex.getMessage());
+      plugin.getLogger().log(Level.WARNING, "Коллекция: посадка " + e.key(), ex);
     }
   }
 
