@@ -185,7 +185,7 @@ public final class Menus implements Listener {
               c.format(p.ledger.cached(player.getUniqueId().toString(), c.id())),
               "ID: " + c.id(),
               p.label("t_61473e0f3e9d") + c.id() + p.label("t_cce207cd2a48"),
-              "/aeconomy exchange " + c.id() + p.label("t_187c07efbc49")),
+              "/twm economy exchange " + c.id() + p.label("t_187c07efbc49")),
           null);
       if (c.icon().startsWith("nexo:") || c.icon().startsWith("mmo:"))
         try {
@@ -321,7 +321,7 @@ public final class Menus implements Listener {
               53,
               Material.NAME_TAG,
               p.label("t_963a4c0955c3"),
-              List.of("/aeconomy bank rename " + tab + p.label("t_dc45a828c0b3")),
+              List.of("/twm economy bank rename " + tab + p.label("t_dc45a828c0b3")),
               () -> p.tell(player, "bank-rename-help"));
           show(player, m);
         },
@@ -470,7 +470,7 @@ public final class Menus implements Listener {
               () -> {
                 player.closeInventory();
                 player.sendMessage(
-                    "/aeconomy mail send "
+                    "/twm economy mail send "
                         + str(row, "sender")
                         + " gold 0 0 Re:"
                         + str(row, "subject")
@@ -565,7 +565,7 @@ public final class Menus implements Listener {
               52,
               Material.COMPASS,
               p.label("t_323424efa7ff"),
-              List.of(p.label("t_921a828b76f5"), "/aeconomy auction mine"),
+              List.of(p.label("t_921a828b76f5"), "/twm economy auction mine"),
               () -> p.tell(player, "auction-help"));
           put(
               m,

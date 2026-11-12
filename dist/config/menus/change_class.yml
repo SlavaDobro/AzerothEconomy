@@ -1,0 +1,66 @@
+# WoW Forever: tools/wow_menu_panels.py
+# Меню TerraWoWmain: /twm menu change_class
+change_class:
+  title: <#8A5A12>✦ <#3A2410>Смена класса <#8A5A12>✦
+  rows: 3
+  fill: frame
+  items:
+    trim:
+      slots:
+      - 0
+      - 8
+      - 18
+      - 26
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    info:
+      slots:
+      - 4
+      icon: BEACON
+      name: <#FFD100>Сменить класс
+      lore:
+      - '<gray>Сейчас: <white>%mmocore_class% <gray>(уровень <white>%mmocore_level%<gray>)'
+      - ''
+      - '<#FF4040>Будет сброшено:'
+      - <gray>• уровень и опыт класса
+      - <gray>• все таланты и очки талантов
+      - <gray>• заклинания, их ранги и ячейки
+      - <gray>• способности, открытые талантами
+      - <gray>• прогресс всех прошлых классов
+      - ''
+      - '<#1EFF00>Сохранится:'
+      - <gray>• профессии
+      - <gray>• деньги, банк, почта
+      - <gray>• вещи и экипировка
+    confirm:
+      slots:
+      - 20
+      icon: RED_CONCRETE
+      name: <#FF4040>✘ Да, сбросить и сменить класс
+      lore:
+      - <gray>Действие нельзя отменить.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы подтвердить
+      click:
+      - close
+      - console mmocore admin reset skill-trees {player}
+      - console mmocore admin reset skills {player}
+      - console mmocore admin reset attributes {player}
+      - console mmocore admin reset classes {player}
+      - console mmocore admin skill-tree-points set {player} 0 global
+      - console mmocore admin class-points set {player} 1
+      - message <#FFD100>✦ Прогресс класса сброшен. Выберите новый путь.
+      - delay 10
+      - console mmocore:class {player}
+    cancel:
+      slots:
+      - 24
+      icon: LIME_CONCRETE
+      name: <#1EFF00>Отмена
+      lore:
+      - <gray>Оставить текущий класс.
+      click:
+      - open main
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '

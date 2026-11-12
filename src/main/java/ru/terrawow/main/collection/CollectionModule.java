@@ -48,7 +48,7 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
     reload();
     Bukkit.getPluginManager().registerEvents(this, plugin);
     Bukkit.getPluginManager().registerEvents(menus, plugin);
-    for (String cmd : List.of("mounts", "pets", "twm")) {
+    for (String cmd : List.of("mounts", "pets")) { // /twm mount|pet goes through TwmCommand
       PluginCommand c = Objects.requireNonNull(plugin.getCommand(cmd), cmd);
       c.setExecutor(this);
       c.setTabCompleter(this);
@@ -421,18 +421,44 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
   }
 
   // ---------------------------------------------------------------- commands
+  /** Short commands /mounts and /pets: the same as /twm mount and /twm pet. */
   @Override
   public boolean onCommand(CommandSender s, Command cmd, String label, String[] a) {
+    command(s, cmd.getName().startsWith("pet") ? Kind.PET : Kind.MOUNT, a);
+    return true;
+  }
+
+  /**
+   * /twm mount|pet [подкоманда]. Без подкоманды — журнал. Подкоманды (кроме help) — для twm.admin:
+   * give, take, unlock, list, open, summon, dismiss, reload.
+   */
+  public void command(CommandSender s, Kind kind, String[] a) {
     try {
-      switch (cmd.getName()) {
-        case "mounts" -> menus.list(player(s), Kind.MOUNT, 0);
-        case "pets" -> menus.list(player(s), Kind.PET, 0);
-        default -> admin(s, a);
+      if (a.length == 0) {
+        if (!s.hasPermission("twm." + kind.key)) throw new IllegalArgumentException("Нет права twm." + kind.key);
+        menus.list(player(s), kind, 0);
+        return;
       }
+      if (a[0].equalsIgnoreCase("help")) {
+        help(s, kind);
+        return;
+      }
+      if (!s.hasPermission("twm.admin")) throw new IllegalArgumentException("Нет права twm.admin");
+      admin(s, kind, a);
     } catch (IllegalArgumentException | IllegalStateException e) {
       s.sendMessage(Text.c("&c" + e.getMessage()));
     }
-    return true;
+  }
+
+  private static void help(CommandSender s, Kind kind) {
+    String k = "/twm " + kind.key;
+    String what = kind == Kind.MOUNT ? "маунта" : "питомца";
+    s.sendMessage(Text.c("&6" + k + " &7— журнал (" + (kind == Kind.MOUNT ? "/mounts" : "/pets") + ")"));
+    s.sendMessage(Text.c("&6" + k + " give|take <ник> <id> [облик] &7— выдать/забрать " + what + " или облик"));
+    s.sendMessage(Text.c("&6" + k + " unlock <id|all> [ник] &7— открыть со всеми обликами (без ника — себе)"));
+    s.sendMessage(Text.c("&6" + k + " list [ник] &7| &6" + k + " open <ник> &7— коллекция / открыть журнал игроку"));
+    s.sendMessage(Text.c("&6" + k + " summon <ник> <id> &7| &6" + k + " dismiss <ник> &7— призвать / отозвать за игрока"));
+    s.sendMessage(Text.c("&6" + k + " reload &7— перечитать collections.yml"));
   }
 
   private static Player player(CommandSender s) {
@@ -440,45 +466,35 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
     return p;
   }
 
-  private void admin(CommandSender s, String[] a) {
-    if (a.length == 0) {
-      s.sendMessage(Text.c("&6/twm give|take <ник> <mount|pet> <id> [skin] &7— выдать/забрать"));
-      s.sendMessage(Text.c("&6/twm unlock <id|all> [ник] &7— разблокировать маунта со всеми обликами (без ника — себе)"));
-      s.sendMessage(Text.c("&6/twm list <ник> &7— коллекция игрока"));
-      s.sendMessage(Text.c("&6/twm open <mounts|pets> <ник> &7— открыть меню (для консоли/панелей)"));
-      s.sendMessage(Text.c("&6/twm summon <ник> <mount|pet> <id> &7| &6/twm dismiss <ник> <mount|pet>"));
-      s.sendMessage(Text.c("&6/twm reload &7— перечитать collections.yml"));
-      return;
-    }
-    switch (a[0]) {
+  private void admin(CommandSender s, Kind kind, String[] a) {
+    switch (a[0].toLowerCase(Locale.ROOT)) {
       case "reload" -> {
         reload();
         s.sendMessage(Text.c("&acollections.yml перечитан."));
       }
       case "open" -> {
-        need(a, 3);
-        Player p = online(a[2]);
-        menus.list(p, a[1].startsWith("pet") ? Kind.PET : Kind.MOUNT, 0);
+        need(a, 2, kind);
+        menus.list(online(a[1]), kind, 0);
       }
       case "summon" -> {
-        need(a, 4);
-        Player p = online(a[1]);
-        summon(p, config.get(Kind.parse(a[2]), a[3]));
+        need(a, 3, kind);
+        summon(online(a[1]), config.get(kind, a[2].toLowerCase(Locale.ROOT)));
       }
       case "dismiss" -> {
-        need(a, 3);
-        dismiss(online(a[1]), Kind.parse(a[2]), true);
+        need(a, 2, kind);
+        dismiss(online(a[1]), kind, true);
       }
       case "give", "take" -> {
-        need(a, 4);
+        need(a, 3, kind);
         OfflinePlayer target = offline(a[1]);
-        Entry e = config.get(Kind.parse(a[2]), a[3]);
+        Entry e = config.get(kind, a[2].toLowerCase(Locale.ROOT));
         PlayerCollection c = of(target.getUniqueId());
-        boolean give = a[0].equals("give");
+        boolean give = a[0].equalsIgnoreCase("give");
         String what;
-        if (a.length >= 5) {
-          Skin skin = e.skins().get(a[4]);
-          if (skin == null) throw new IllegalArgumentException("Нет облика " + a[4] + " у " + e.key());
+        Skin skin = null;
+        if (a.length >= 4) {
+          skin = e.skins().get(a[3]);
+          if (skin == null) throw new IllegalArgumentException("Нет облика " + a[3] + " у " + e.key());
           String k = e.key() + ":" + skin.id();
           if (give) {
             c.skins.add(k);
@@ -492,15 +508,14 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
         save(c);
         s.sendMessage(Text.c((give ? "&aВыдано " : "&eЗабрано ") + what + " &7→ " + target.getName()));
         Player online = target.getPlayer();
-        if (online != null && give) msg(online, "&6✦ В вашу коллекцию добавлено: " + (a.length >= 5 ? e.skins().get(a[4]).name() : e.name()));
+        if (online != null && give) msg(online, "&6✦ В вашу коллекцию добавлено: " + (skin != null ? skin.name() : e.name()));
       }
       case "unlock" -> {
-        // /twm unlock <id|all> [ник] — маунт со всеми обликами; без ника — себе
-        need(a, 2);
+        need(a, 2, kind);
         OfflinePlayer target = a.length >= 3 ? offline(a[2]) : player(s);
         List<Entry> list = a[1].equalsIgnoreCase("all")
-            ? new ArrayList<>(config.all(Kind.MOUNT))
-            : List.of(config.get(Kind.MOUNT, a[1].toLowerCase(Locale.ROOT)));
+            ? new ArrayList<>(config.all(kind))
+            : List.of(config.get(kind, a[1].toLowerCase(Locale.ROOT)));
         PlayerCollection c = of(target.getUniqueId());
         for (Entry e : list) {
           c.owned.add(e.key());
@@ -513,18 +528,20 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
         if (online != null && online != s) msg(online, "&6✦ В вашу коллекцию добавлено: &r" + names);
       }
       case "list" -> {
-        need(a, 2);
-        OfflinePlayer target = offline(a[1]);
+        OfflinePlayer target = a.length >= 2 ? offline(a[1]) : player(s);
         PlayerCollection c = of(target.getUniqueId());
-        s.sendMessage(Text.c("&6Коллекция " + target.getName() + ": &f" + String.join(", ", c.owned)));
-        s.sendMessage(Text.c("&6Облики: &f" + String.join(", ", c.skins)));
+        String prefix = kind.key + ":";
+        s.sendMessage(Text.c("&6" + (kind == Kind.MOUNT ? "Маунты " : "Питомцы ") + target.getName() + ": &f"
+            + String.join(", ", c.owned.stream().filter(x -> x.startsWith(prefix)).map(x -> x.substring(prefix.length())).toList())));
+        s.sendMessage(Text.c("&6Облики: &f"
+            + String.join(", ", c.skins.stream().filter(x -> x.startsWith(prefix)).map(x -> x.substring(prefix.length())).toList())));
       }
-      default -> throw new IllegalArgumentException("Неизвестная команда. /twm");
+      default -> throw new IllegalArgumentException("Неизвестная подкоманда. /twm " + kind.key + " help");
     }
   }
 
-  private static void need(String[] a, int n) {
-    if (a.length < n) throw new IllegalArgumentException("Не хватает аргументов. /twm");
+  private static void need(String[] a, int n, Kind kind) {
+    if (a.length < n) throw new IllegalArgumentException("Не хватает аргументов. /twm " + kind.key + " help");
   }
 
   private static Player online(String name) {
@@ -544,38 +561,36 @@ public final class CollectionModule implements Listener, CommandExecutor, TabCom
 
   @Override
   public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
-    if (!cmd.getName().equals("twm")) return List.of();
-    List<String> out = switch (a.length) {
-      case 1 -> List.of("give", "take", "unlock", "list", "open", "summon", "dismiss", "reload");
-      case 2 -> a[0].equals("open") ? List.of("mounts", "pets")
-          : a[0].equals("unlock") ? unlockIds()
-          : Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
-      case 3 -> a[0].equals("open") || a[0].equals("unlock") ? Bukkit.getOnlinePlayers().stream().map(Player::getName).toList()
-          : List.of("mount", "pet");
-      case 4 -> a[0].equals("unlock") ? List.of() : safeIds(a[2]);
-      case 5 -> a[0].equals("unlock") ? List.of() : safeSkins(a[2], a[3]);
-      default -> List.of();
-    };
-    return out.stream().filter(x -> x.toLowerCase(Locale.ROOT).startsWith(a[a.length - 1].toLowerCase(Locale.ROOT))).toList();
+    return tab(s, cmd.getName().startsWith("pet") ? Kind.PET : Kind.MOUNT, a);
   }
 
-  private List<String> unlockIds() {
-    List<String> ids = new ArrayList<>(config.entries.get(Kind.MOUNT).keySet());
-    ids.add("all");
+  /** Tab completion for /twm mount|pet … and /mounts, /pets. */
+  public List<String> tab(CommandSender s, Kind kind, String[] a) {
+    if (a.length == 0) return List.of();
+    List<String> players = Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+    String sub = a[0].toLowerCase(Locale.ROOT);
+    List<String> out;
+    if (!s.hasPermission("twm.admin")) out = a.length == 1 ? List.of("help") : List.of();
+    else out = switch (a.length) {
+      case 1 -> List.of("help", "give", "take", "unlock", "list", "open", "summon", "dismiss", "reload");
+      case 2 -> sub.equals("unlock") ? ids(kind, true) : sub.equals("reload") || sub.equals("help") ? List.of() : players;
+      case 3 -> sub.equals("unlock") ? players : List.of("give", "take", "summon").contains(sub) ? ids(kind, false) : List.of();
+      case 4 -> List.of("give", "take").contains(sub) ? skins(kind, a[2]) : List.of();
+      default -> List.of();
+    };
+    String last = a[a.length - 1].toLowerCase(Locale.ROOT);
+    return out.stream().filter(x -> x.toLowerCase(Locale.ROOT).startsWith(last)).toList();
+  }
+
+  private List<String> ids(Kind kind, boolean withAll) {
+    List<String> ids = new ArrayList<>(config.entries.get(kind).keySet());
+    if (withAll) ids.add("all");
     return ids;
   }
 
-  private List<String> safeIds(String kind) {
+  private List<String> skins(Kind kind, String id) {
     try {
-      return new ArrayList<>(config.entries.get(Kind.parse(kind)).keySet());
-    } catch (Exception e) {
-      return List.of();
-    }
-  }
-
-  private List<String> safeSkins(String kind, String id) {
-    try {
-      return new ArrayList<>(config.get(Kind.parse(kind), id).skins().keySet());
+      return new ArrayList<>(config.get(kind, id.toLowerCase(Locale.ROOT)).skins().keySet());
     } catch (Exception e) {
       return List.of();
     }

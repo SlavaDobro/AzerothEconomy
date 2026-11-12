@@ -98,10 +98,8 @@ final class CollectionMenus implements Listener {
         p.closeInventory();
         m.dismiss(p, Kind.PET, true);
       });
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), false, () -> {
-      p.closeInventory();
-      p.performCommand("menu");
-    });
+    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), false,
+        () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
     Kind other = kind == Kind.MOUNT ? Kind.PET : Kind.MOUNT;
     item(g, 53, other == Kind.PET ? "LEAD" : "SADDLE", "<#FFD100>" + (other == Kind.PET ? "Питомцы ▸" : "Маунты ▸"), List.of(), false,
         () -> list(p, other, 0));

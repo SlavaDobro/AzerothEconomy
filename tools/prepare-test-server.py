@@ -13,8 +13,8 @@ def ignore(path,names):
 for folder in (src/'plugins').iterdir():
  if folder.is_dir() and folder.name not in ['.paper-remapped','bStats','spark']:
   shutil.copytree(folder,dst/'plugins'/folder.name,dirs_exist_ok=True,ignore=ignore)
-shutil.copy2(project/'target/AzerothEconomy-1.0.0.jar',dst/'plugins/AzerothEconomy-1.0.0.jar')
-(dst/'plugins/AzerothEconomy').mkdir(exist_ok=True)
+shutil.copy2(project/'target/TerraWoWmain-1.1.0.jar',dst/'plugins/TerraWoWmain-1.1.0.jar')
+(dst/'plugins/TerraWoWmain').mkdir(exist_ok=True)
 config=(project/'src/main/resources/config.yml').read_text(encoding='utf-8').replace('self-test: false','self-test: true').replace('stop-after-tests: false','stop-after-tests: true')
-(dst/'plugins/AzerothEconomy/config.yml').write_text(config,encoding='utf-8')
+(dst/'plugins/TerraWoWmain/config.yml').write_text(config,encoding='utf-8')
 print('Isolated test server prepared:',dst)

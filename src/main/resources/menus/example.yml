@@ -1,0 +1,33 @@
+# Пример меню TerraWoWmain. Каждый ключ верхнего уровня — одно меню: /twm menu <id>.
+# Главное меню сервера должно называться main (открывается /menu и /wow).
+# Меню сервера создают инструменты: tools/wow_menu_panels.py (main, professions, change_class)
+# и tools/install_custom_class.py (custom_classes, class_<id>). Этот файл можно удалить.
+#
+# Предмет:  slot / slots (числа или '45-53'), icon (MATERIAL | nexo:<id> | mmo:<TYPE>:<ID> | head:<ник>),
+#           model-data, glint, name, lore, show-if, click / left-click / right-click, require + deny.
+# Действия: close · open <меню> · delay <тики> · console <команда> · player <команда> · chat </команда>
+#           · message <текст> · sound <звук> [громкость] [тон]
+# Тексты:   MiniMessage (<gold>, <#FFD100>) и &-коды; {player} — ник; плейсхолдеры PlaceholderAPI.
+# Условия:  '%mmocore_class_id% == HUMAN', 'a != b', '%mmocore_level% >= 10', 'perm:twm.admin', '!perm:…', && и ||.
+
+example:
+  title: '<#8A5A12>✦ <#3A2410>Пример <#8A5A12>✦'
+  rows: 3
+  fill: frame
+  items:
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '
+    corner:
+      slots: [0, 8, 18, 26]
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    hello:
+      slot: 13
+      icon: 'head:{player}'
+      name: '<#FFD100>Привет, {player}!'
+      lore:
+      - '&7Это пример меню TerraWoWmain.'
+      - ''
+      - '<#FFE88A>▸ Нажмите, чтобы закрыть'
+      click: [close, 'message <#FFD100>Меню работает!']

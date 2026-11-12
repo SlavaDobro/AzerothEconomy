@@ -1,0 +1,229 @@
+# WoW Forever: tools/wow_menu_panels.py
+# Меню TerraWoWmain: /twm menu professions
+professions:
+  title: <#8A5A12>✦ <#3A2410>Профессии <#8A5A12>✦
+  rows: 5
+  fill: frame
+  items:
+    trim:
+      slots:
+      - 0
+      - 8
+      - 36
+      - 44
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    mining:
+      slots:
+      - 9
+      icon: IRON_PICKAXE
+      name: <#FFD100>Горное дело <dark_gray>• <gray>Собирательство
+      lore:
+      - <#FFE88A>Добыча руды и самоцветов в недрах.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_mining% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_mining%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    herbalism:
+      slots:
+      - 10
+      icon: FERN
+      name: <#FFD100>Травничество <dark_gray>• <gray>Собирательство
+      lore:
+      - <#FFE88A>Сбор целебных трав, цветов и грибов.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_herbalism% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_herbalism%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    skinning:
+      slots:
+      - 11
+      icon: SHEARS
+      name: <#FFD100>Снятие шкур <dark_gray>• <gray>Собирательство
+      lore:
+      - <#FFE88A>Шкуры и кожа добытых зверей.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_skinning% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_skinning%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    blacksmithing:
+      slots:
+      - 12
+      icon: ANVIL
+      name: <#FFD100>Кузнечное дело <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Ковка оружия и латных доспехов.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_blacksmithing% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_blacksmithing%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    leatherworking:
+      slots:
+      - 13
+      icon: LEATHER
+      name: <#FFD100>Кожевничество <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Кожаные доспехи, сумки и сёдла.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_leatherworking% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_leatherworking%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    tailoring:
+      slots:
+      - 14
+      icon: WHITE_WOOL
+      name: <#FFD100>Портняжное дело <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Ткань, знамёна и постельные принадлежности.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_tailoring% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_tailoring%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    alchemy:
+      slots:
+      - 15
+      icon: BREWING_STAND
+      name: <#FFD100>Алхимия <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Зелья, эликсиры и настои.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_alchemy% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_alchemy%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    enchanting:
+      slots:
+      - 16
+      icon: ENCHANTING_TABLE
+      name: <#FFD100>Наложение чар <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Чары для оружия и доспехов.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_enchanting% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_enchanting%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    engineering:
+      slots:
+      - 17
+      icon: PISTON
+      name: <#FFD100>Инженерное дело <dark_gray>• <gray>Ремесло
+      lore:
+      - <#FFE88A>Механизмы, взрывчатка и рельсы.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_engineering% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_engineering%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    cooking:
+      slots:
+      - 21
+      icon: COOKED_BEEF
+      name: <#FFD100>Кулинария <dark_gray>• <gray>Вспомогательная
+      lore:
+      - <#FFE88A>Сытная еда для странников.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_cooking% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_cooking%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    firstaid:
+      slots:
+      - 22
+      icon: RED_DYE
+      name: <#FFD100>Первая помощь <dark_gray>• <gray>Вспомогательная
+      lore:
+      - <#FFE88A>Средства исцеления ран.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_firstaid% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_firstaid%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    fishing:
+      slots:
+      - 23
+      icon: FISHING_ROD
+      name: <#FFD100>Рыбная ловля <dark_gray>• <gray>Вспомогательная
+      lore:
+      - <#FFE88A>Рыба и сокровища из глубин.
+      - ''
+      - '<gray>Навык: <white>%mmocore_profession_fishing% <dark_gray>/ 300'
+      - '<gray>Прогресс: <white>%mmocore_profession_percent_fishing%%'
+      - ''
+      - <dark_gray>Подробнее — в меню персонажа.
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    info:
+      slots:
+      - 4
+      icon: BOOK
+      name: <#FFD100>Профессии Азерота
+      lore:
+      - '<gray>Верхний ряд — основные профессии:'
+      - <gray>собирательство и ремёсла.
+      - <gray>Ниже — вспомогательные.
+      - ''
+      - '<gray>Навык растёт от работы: добыча,'
+      - <gray>крафт, варка, зачарование, рыбалка.
+    back:
+      slots:
+      - 40
+      icon: ARROW
+      name: <#FFD100>◂ Главное меню
+      click:
+      - open main
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '

@@ -25,6 +25,7 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
   public Commands commands;
   public ru.terrawow.main.collection.CollectionModule collections;
   public ru.terrawow.main.race.RaceModule races;
+  public ru.terrawow.main.menu.MenuModule menuModule;
   private Database db;
   private ThreadPoolExecutor worker;
   private YamlConfiguration messages;
@@ -33,28 +34,6 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
   private VaultBridge vault;
   public Map<String, Long> units = new HashMap<>();
   private final Map<String, Long> countdown = new HashMap<>();
-
-  /** Folder name of this plugin before it became TerraWoWmain (1.0.0 was called AzerothEconomy). */
-  static final String LEGACY_NAME = "AzerothEconomy";
-
-  @Override
-  public void onLoad() {
-    // One-time move of the old data folder (database, configs, backups) so balances, bank and mail stay.
-    File legacy = new File(getDataFolder().getParentFile(), LEGACY_NAME);
-    if (!getDataFolder().exists() && legacy.isDirectory()) {
-      try {
-        java.nio.file.Files.move(legacy.toPath(), getDataFolder().toPath());
-        getLogger().info("Данные перенесены: plugins/" + LEGACY_NAME + " → plugins/" + getName());
-      } catch (IOException e) {
-        throw new IllegalStateException(
-            "Не удалось перенести plugins/" + LEGACY_NAME + " в plugins/" + getName()
-                + ". Остановите сервер и перенесите папку вручную.", e);
-      }
-    } else if (getDataFolder().exists() && legacy.isDirectory()) {
-      getLogger().warning("Найдены обе папки: plugins/" + LEGACY_NAME + " и plugins/" + getName()
-          + ". Используется plugins/" + getName() + "; старую папку проверьте и удалите вручную.");
-    }
-  }
 
   @Override
   public void onEnable() {
@@ -146,8 +125,9 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
       custody = new Custody(this);
       menus = new Menus(this);
       commands = new Commands(this);
-      Objects.requireNonNull(getCommand("aeconomy")).setExecutor(commands);
-      getCommand("aeconomy").setTabCompleter(commands);
+      TwmCommand twm = new TwmCommand(this); // /twm economy|mount|pet|race|racial|reload
+      Objects.requireNonNull(getCommand("twm")).setExecutor(twm);
+      getCommand("twm").setTabCompleter(twm);
       getServer().getPluginManager().registerEvents(this, this);
       getServer().getPluginManager().registerEvents(custody, this);
       getServer().getPluginManager().registerEvents(menus, this);
@@ -191,12 +171,20 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
           getLogger().log(java.util.logging.Level.SEVERE, "Коллекция маунтов и питомцев не запущена", e);
         }
       if (getConfig().getBoolean("modules.races", true))
-        try { // races of Azeroth; a broken races.yml must not stop the economy
+        try { // WoW races; a broken races.yml must not stop the economy
           races = new ru.terrawow.main.race.RaceModule(this);
           races.enable();
         } catch (Exception e) {
           races = null;
           getLogger().log(java.util.logging.Level.SEVERE, "Модуль рас не запущен", e);
+        }
+      if (getConfig().getBoolean("modules.menus", true))
+        try { // server menus (/menu); a broken menus/*.yml must not stop the economy
+          menuModule = new ru.terrawow.main.menu.MenuModule(this);
+          menuModule.enable();
+        } catch (Exception e) {
+          menuModule = null;
+          getLogger().log(java.util.logging.Level.SEVERE, "Меню не запущены (plugins/TerraWoWmain/menus)", e);
         }
       getLogger()
           .info("SQLite готова; Vault=1 медная; владелец=UUID аккаунта. " + ledger.diagnostics());
@@ -317,8 +305,8 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
     if (!economyHealthy
         && !List.of("admin.diagnose", "admin.backup", "admin.recovery").contains(action))
       throw new IllegalStateException("Экономика остановлена: конфликт провайдеров");
-    if (!sender.hasPermission("azeroth." + action))
-      throw new IllegalArgumentException("Нет права azeroth." + action);
+    if (!sender.hasPermission("twm.economy." + action))
+      throw new IllegalArgumentException("Нет права twm.economy." + action);
   }
 
   public void currencyPermission(CommandSender s, String id) {
@@ -341,7 +329,7 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
     check(player, type);
     module(type);
     if (!getConfig().getBoolean(type + ".remote")
-        && !player.hasPermission("azeroth." + type + ".remote")
+        && !player.hasPermission("twm.economy." + type + ".remote")
         && !menus.localAccess.containsKey(player.getUniqueId() + ":" + type))
       throw new IllegalArgumentException(
           "Подойдите к " + (type.equals("bank") ? "банкиру" : "почтовому ящику"));

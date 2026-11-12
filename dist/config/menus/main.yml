@@ -1,0 +1,261 @@
+# WoW Forever: tools/wow_menu_panels.py
+# Меню TerraWoWmain: /twm menu main
+main:
+  title: <#8A5A12>✦ <#3A2410>Азерот • Главное меню <#8A5A12>✦
+  rows: 6
+  fill: frame
+  items:
+    trim:
+      slots:
+      - 0
+      - 8
+      - 45
+      - 53
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    hero:
+      slots:
+      - 4
+      icon: head:{player}
+      name: <#FFD100>{player}
+      lore:
+      - '<gray>Класс: <white>%mmocore_class%'
+      - '<gray>Уровень: <white>%mmocore_level% <dark_gray>/ 60'
+      - '<gray>Опыт: <white>%mmocore_level_percent%%'
+      - ''
+      - '<gray>Здоровье: <#FF4040>%mmocore_health%<gray> / %mmocore_max_health%'
+      - '<gray>Очки талантов: <white>%mmocore_skill_tree_points_global%'
+      - '<gray>Кошелёк: <#FFD100>%twm_gold%'
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    character:
+      slots:
+      - 19
+      icon: ARMOR_STAND
+      name: <#FFD100>Персонаж
+      lore:
+      - <gray>Уровень, боевые показатели,
+      - <gray>характеристики и профессии.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    spellbook:
+      slots:
+      - 21
+      icon: ENCHANTED_BOOK
+      name: <#FFD100>Книга заклинаний
+      lore:
+      - <gray>Заклинания класса и 9 ячеек.
+      - '<gray>Применение: <white>F<gray>, затем <white>1–9<gray>.'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:skills
+    talents:
+      slots:
+      - 23
+      icon: NETHER_STAR
+      name: <#FFD100>Таланты
+      lore:
+      - <gray>Три ветки талантов вашего класса.
+      - '<gray>Свободно очков: <white>%mmocore_skill_tree_points_global%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:skilltrees
+    attributes:
+      slots:
+      - 25
+      icon: GOLDEN_APPLE
+      name: <#FFD100>Характеристики
+      lore:
+      - <gray>Сила, ловкость, выносливость,
+      - <gray>интеллект и дух.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:attributes
+    professions:
+      slots:
+      - 28
+      icon: CRAFTING_TABLE
+      name: <#FFD100>Профессии
+      lore:
+      - <gray>9 основных и 3 вспомогательные
+      - <gray>профессии, навык до 300.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - open professions
+    mounts:
+      slots:
+      - 30
+      icon: SADDLE
+      name: <#FFD100>Маунты
+      lore:
+      - <gray>Ездовые и летающие животные.
+      - <gray>Призыв — 3 секунды, и вы в седле.
+      - <gray>Облики маунтов — ПКМ в журнале.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm mount
+    pets:
+      slots:
+      - 32
+      icon: LEAD
+      name: <#FFD100>Питомцы
+      lore:
+      - <gray>Спутники, что всюду следуют за вами.
+      - <gray>Облики питомцев — ПКМ в журнале.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm pet
+    economy:
+      slots:
+      - 34
+      icon: GOLD_INGOT
+      name: <#FFD100>Экономика
+      lore:
+      - <gray>Кошелёк, банк, почта, торговля
+      - <gray>и аукцион.
+      - '<gray>Монеты: <#FFD100>%twm_gold%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm economy
+    class_choose:
+      slots:
+      - 13
+      icon: BEACON
+      glint: true
+      name: <#1EFF00>✦ Выбрать класс
+      lore:
+      - <gray>Вы ещё не выбрали свой путь.
+      - <gray>Девять классов Азерота ждут вас.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы выбрать
+      show-if: '%mmocore_class_id% == HUMAN'
+      click:
+      - close
+      - delay 1
+      - console mmocore:class {player}
+    class_current:
+      slots:
+      - 13
+      icon: BEACON
+      name: '<#FFD100>Ваш класс: <white>%mmocore_class%'
+      lore:
+      - '<gray>Уровень класса: <white>%mmocore_level%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы сменить класс
+      - <dark_gray>Смена класса сбрасывает весь прогресс класса.
+      click:
+      - open change_class
+    travel:
+      slots:
+      - 37
+      icon: COMPASS
+      name: <#FFD100>Путешествия
+      lore:
+      - <gray>Открытые точки перемещения.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - console mmocore:waypoints {player}
+    party:
+      slots:
+      - 39
+      icon: CAMPFIRE
+      name: <#FFD100>Группа
+      lore:
+      - <gray>Группа до 5 искателей приключений.
+      - '<gray>Сейчас в группе: <white>%mmocore_party_count%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:party
+    friends:
+      slots:
+      - 41
+      icon: WRITABLE_BOOK
+      name: <#FFD100>Друзья
+      lore:
+      - '<gray>Друзья в сети: <white>%mmocore_online_friends%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:friends
+    guild:
+      slots:
+      - 43
+      icon: WHITE_BANNER
+      name: <#FFD100>Гильдия
+      lore:
+      - '<gray>Ваша гильдия: <white>%mmocore_guild_name%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:guild
+    help:
+      slots:
+      - 48
+      icon: BOOK
+      name: <#FFD100>Подсказки
+      lore:
+      - '<gray>Меню: <white>/menu'
+      - '<gray>Заклинания: <white>/skills <dark_gray>• <gray>таланты: <white>/talents'
+      - '<gray>Каст: <white>F<gray>, затем <white>1–9'
+      - <gray>С 10-го уровня — 1 очко таланта за уровень.
+    race:
+      slots:
+      - 49
+      icon: TOTEM_OF_UNDYING
+      name: <#FFD100>Раса
+      lore:
+      - <gray>Ваша раса, фракция и расовые
+      - '<gray>особенности. Способность: <white>/twm racial'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm race
+    close:
+      slots:
+      - 50
+      icon: BARRIER
+      name: <#FF4040>Закрыть
+      lore:
+      - <gray>Вернуться в игру.
+      click:
+      - close
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '

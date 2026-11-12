@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: ru.azeroth.economy.RestartTest
+Test set: ru.terrawow.main.MariaDbTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.588 s -- in ru.azeroth.economy.RestartTest
+Tests run: 36, Failures: 0, Errors: 0, Skipped: 36, Time elapsed: 0.001 s -- in ru.terrawow.main.MariaDbTest

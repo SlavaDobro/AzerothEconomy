@@ -1,0 +1,169 @@
+# Перенесено из CommandPanels (wow_class_arctic_knight.yml) — tools/migrate_cp_menus.py
+# Меню TerraWoWmain: /twm menu class_arctic_knight
+class_arctic_knight:
+  title: <#8A5A12>✦ <#3A2410>Арктический рыцарь <#8A5A12>✦
+  rows: 6
+  fill: frame
+  items:
+    trim:
+      slots:
+      - 0
+      - 8
+      - 45
+      - 53
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    hero:
+      slots:
+      - 4
+      icon: STONE_SWORD
+      model-data: 2058
+      name: <#7FD6FF>Арктический рыцарь
+      lore:
+      - <dark_gray>Танк • Ближний бой • Лёд
+      - ''
+      - <#FFE88A>Легендарный воин вечной зимы. Ледяное копьё,
+      - <#FFE88A>кратеры льда и щит, что не пропускает врага.
+      - ''
+      - '<gray>Ресурс: <white>Ярость'
+    skill_frost_strike:
+      slots:
+      - 19
+      icon: COAL
+      model-data: 2187
+      name: <#7FD6FF>Морозный удар
+      lore:
+      - '<gray>С уровня: <white>1'
+      - '<#FFE88A>Удары ледяным копьём: каждый третий —'
+      - <#FFE88A>кратер льда, что подбрасывает врагов.
+    skill_frostbite:
+      slots:
+      - 20
+      icon: COAL
+      model-data: 2188
+      name: <#7FD6FF>Обморожение
+      lore:
+      - '<gray>С уровня: <white>1  <#1EFF00>пассивно'
+      - '<#FFE88A>Пассивно: удары навыками с шансом 20%'
+      - <#FFE88A>обмораживают цель — урон со временем.
+    skill_glacial_impalement:
+      slots:
+      - 21
+      icon: COAL
+      model-data: 2190
+      name: <#7FD6FF>Ледяное пронзание
+      lore:
+      - '<gray>С уровня: <white>4'
+      - <#FFE88A>Ледяное копьё прицеливается 3 сек.
+      - <#FFE88A>и пронзает всех врагов на пути.
+    skill_arctic_charge:
+      slots:
+      - 22
+      icon: COAL
+      model-data: 2186
+      name: <#7FD6FF>Арктический рывок
+      lore:
+      - '<gray>С уровня: <white>10'
+      - <#FFE88A>Рывок духа полярного волка. Оставляет
+      - <#FFE88A>ледяной след, который ранит и замедляет.
+      - <#FFE88A>Только стоя на земле.
+    skill_glacier_smash:
+      slots:
+      - 23
+      icon: COAL
+      model-data: 2191
+      name: <#7FD6FF>Ледниковый удар
+      lore:
+      - '<gray>С уровня: <white>18'
+      - '<#FFE88A>Прыжок и удар о землю: большой кратер'
+      - <#FFE88A>льда замораживает всех внутри.
+    skill_frozen_shield:
+      slots:
+      - 24
+      icon: COAL
+      model-data: 2189
+      name: <#7FD6FF>Ледяной щит
+      lore:
+      - '<gray>С уровня: <white>26'
+      - <#FFE88A>Щит не подпускает врагов и блокирует
+      - <#FFE88A>снаряды, а затем летит вперёд и отбрасывает.
+    skill_permafrost_lance:
+      slots:
+      - 25
+      icon: COAL
+      model-data: 2192
+      name: <#7FD6FF>Копьё вечной мерзлоты
+      lore:
+      - '<gray>С уровня: <white>40'
+      - '<#FFE88A>Высшая техника: два разреза, подброс'
+      - <#FFE88A>и удар, пригвождающий врагов ко льду.
+    tree_lance:
+      slots:
+      - 29
+      icon: STONE_SWORD
+      name: '<#7FD6FF>Таланты: Ледяное копьё'
+      lore:
+      - <#FFE88A>Урон копья и критические удары.
+      - ''
+      - '<gray>Вершина: <#7FD6FF>Пик вечной мерзлоты'
+    tree_frost:
+      slots:
+      - 31
+      icon: BLUE_ICE
+      name: '<#7FD6FF>Таланты: Вечная мерзлота'
+      lore:
+      - <#FFE88A>Заморозка, контроль и ледниковые кратеры.
+      - ''
+      - '<gray>Вершина: <#7FD6FF>Абсолютный ноль'
+    tree_bulwark:
+      slots:
+      - 33
+      icon: SHIELD
+      name: '<#7FD6FF>Таланты: Ледяной оплот'
+      lore:
+      - <#FFE88A>Броня, блок и непробиваемый щит.
+      - ''
+      - '<gray>Вершина: <#7FD6FF>Вечный лёд'
+    choose:
+      slots:
+      - 40
+      icon: LIME_CONCRETE
+      name: '<#1EFF00>✦ Стать: Арктический рыцарь'
+      lore:
+      - <gray>Выбор класса делается один раз.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы подтвердить
+      show-if: '%mmocore_class_id% == HUMAN'
+      click:
+      - close
+      - console mmocore admin reset skill-trees {player}
+      - console mmocore admin reset skills {player}
+      - console mmocore class select {player} ARCTIC_KNIGHT
+      - console mmocore admin class-points set {player} 0
+      require: '%mmocore_class_id% == HUMAN'
+      deny:
+      - message <#FF4040>Класс уже выбран.
+    chosen:
+      slots:
+      - 40
+      icon: GRAY_CONCRETE
+      name: <gray>Класс уже выбран
+      lore:
+      - '<gray>Ваш класс: <white>%mmocore_class%'
+    back:
+      slots:
+      - 48
+      icon: ARROW
+      name: <#FFD100>◂ Особые классы
+      click:
+      - open custom_classes
+    close:
+      slots:
+      - 50
+      icon: BARRIER
+      name: <#FF4040>Закрыть
+      click:
+      - close
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '

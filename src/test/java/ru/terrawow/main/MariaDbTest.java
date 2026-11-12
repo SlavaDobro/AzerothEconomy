@@ -9,14 +9,14 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 /** Same ledger contract suite against a real isolated MariaDB on loopback:33077. */
-@EnabledIfSystemProperty(named = "ae.mariadb.tests", matches = "true")
+@EnabledIfSystemProperty(named = "twm.mariadb.tests", matches = "true")
 class MariaDbTest extends LedgerTest {
   String schema;
 
   @Override
   @BeforeEach
   void setup() throws Exception {
-    schema = "ae_test_" + UUID.randomUUID().toString().replace("-", "");
+    schema = "twm_test_" + UUID.randomUUID().toString().replace("-", "");
     try (Connection c = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:33077/", "root", "");
         Statement s = c.createStatement()) {
       s.execute("CREATE DATABASE " + schema);

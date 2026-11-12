@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: ru.azeroth.economy.LedgerTest
+Test set: ru.terrawow.main.PluginYmlTest
 -------------------------------------------------------------------------------
-Tests run: 36, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.843 s -- in ru.azeroth.economy.LedgerTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in ru.terrawow.main.PluginYmlTest

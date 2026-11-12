@@ -1,10 +1,10 @@
 # Расы Азерота
 
-Модуль `ru.terrawow.main.race`. Он включается флагом `modules.races: true` в `config.yml`, все настройки лежат в `plugins/TerraWoWmain/races.yml`. Файл создаётся при первом запуске; после правки выполните `/race reload`.
+Модуль `ru.terrawow.main.race`. Он включается флагом `modules.races: true` в `config.yml`, все настройки лежат в `plugins/TerraWoWmain/races.yml`. Файл создаётся при первом запуске; после правки выполните `/twm race reload`.
 
 ## Как это выглядит в игре
 
-1. При первом входе открывается окно **создания персонажа**. Пока раса не выбрана, закрыть его нельзя; у `terrawow.admin` можно.
+1. При первом входе открывается окно **создания персонажа**. Пока раса не выбрана, закрыть его нельзя; у `twm.admin` можно.
 2. Шаги: **фракция** (Альянс / Орда) → **раса** → **пол** → **подтверждение**. В карточке расы видны рост, расовые особенности, способность и доступные классы.
 3. После выбора, если у игрока ещё нет класса, открывается выбор класса MMOCore (`settings.after-choice-command`).
 4. `/race` — карточка вашей расы, `/racial` — расовая способность. Кнопка «Раса» есть в `/menu`.
@@ -42,13 +42,13 @@
 
 | Действие | Команда | Право |
 |---|---|---|
-| Карточка расы / создание персонажа | `/race` | `terrawow.race` (true) |
-| Расовая способность | `/racial` | `terrawow.race` |
-| Поставить расу | `/race set <ник> <раса> [male\|female]` | `terrawow.admin` (op) |
-| Сбросить (снова выбор) | `/race reset <ник>` | `terrawow.admin` |
-| Узнать расу | `/race info [ник]` | `terrawow.admin` |
-| Открыть выбор игроку | `/race open <ник>` | `terrawow.admin` |
-| Перечитать races.yml | `/race reload` | `terrawow.admin` |
+| Карточка расы / создание персонажа | `/race` | `twm.race` (true) |
+| Расовая способность | `/racial` | `twm.race` |
+| Поставить расу | `/twm race set <ник> <раса> [male\|female]` | `twm.admin` (op) |
+| Сбросить (снова выбор) | `/twm race reset <ник>` | `twm.admin` |
+| Узнать расу | `/twm race info [ник]` | `twm.admin` |
+| Открыть выбор игроку | `/twm race open <ник>` | `twm.admin` |
+| Перечитать races.yml | `/twm race reload` | `twm.admin` |
 
 ID рас: `human dwarf nightelf gnome draenei worgen orc undead tauren troll bloodelf goblin`.
 

@@ -23,6 +23,8 @@ modules:
   collections: true
   # Расы Азерота (races.yml): выбор фракции, расы и пола, рост, пассивки, /racial, классы по расам
   races: true
+  # Меню сервера (plugins/TerraWoWmain/menus/*.yml): /menu, /wow, /twm menu <id>
+  menus: true
 currencies:
   gold:
     name: Монеты
@@ -105,25 +107,25 @@ testing:
   self-test: false
   stop-after-tests: false
 help:
-  - '&6/aeconomy — кошелёк, банк, почта, торговля, аукцион'
+  - '&6/twm economy — кошелёк, банк, почта, торговля, аукцион'
   - '&eСумма: 12345 = 12345 медных; 1g 23s 45c = 1з 23с 45м.'
   - '&7В mail send используйте слитную сумму 1g23s45c; прочие валюты — десятичное число.'
-  - '&f/aeconomy pay <ник/UUID> <валюта> <сумма>'
-  - '&f/aeconomy exchange <из> <в> <сумма>'
-  - '&f/aeconomy bank [open <номер> | rename <номер> <MATERIAL> <имя>]'
-  - '&f/aeconomy bank store <номер> <ID предмета> — из получения в банк'
-  - '&f/aeconomy bank deposit|withdraw <валюта> <сумма> — денежный счёт'
-  - '&f/aeconomy deposit — сохранить предмет из руки; inbox — забрать предметы'
-  - '&f/aeconomy mail attach <ID> | clear — вложения следующего письма'
-  - '&f/aeconomy mail send <ник> <валюта> <сумма> <COD> <тема>|<текст>'
-  - '&f/aeconomy trade <ник> | accept | cancel | money <валюта> <сумма>'
-  - '&f/aeconomy auction sell <цена> | search <материал> | mine'
-  - '&f/aeconomy history [страница]'
-  - '&f/aeconomy cheque issue <валюта> <сумма> | redeem'
+  - '&f/twm economy pay <ник/UUID> <валюта> <сумма>'
+  - '&f/twm economy exchange <из> <в> <сумма>'
+  - '&f/twm economy bank [open <номер> | rename <номер> <MATERIAL> <имя>]'
+  - '&f/twm economy bank store <номер> <ID предмета> — из получения в банк'
+  - '&f/twm economy bank deposit|withdraw <валюта> <сумма> — денежный счёт'
+  - '&f/twm economy deposit — сохранить предмет из руки; inbox — забрать предметы'
+  - '&f/twm economy mail attach <ID> | clear — вложения следующего письма'
+  - '&f/twm economy mail send <ник> <валюта> <сумма> <COD> <тема>|<текст>'
+  - '&f/twm economy trade <ник> | accept | cancel | money <валюта> <сумма>'
+  - '&f/twm economy auction sell <цена> | search <материал> | mine'
+  - '&f/twm economy history [страница]'
+  - '&f/twm economy cheque issue <валюта> <сумма> | redeem'
   - '&cАдмин: give|take|set <ник/UUID> <валюта> <сумма>'
   - '&cАдмин: reward <ID операции UUID> <ник/UUID> <валюта> <сумма> <тема> <текст>'
   - '&cАдмин: diagnose | backup | recovery [ID database|inventory]'
-  - '&cNPC (консоль): aeconomy npc bank|mail <ник>'
+  - '&cNPC (консоль): twm economy npc bank|mail <ник>'
 
 # Общий денежный банк: независимые роли; не синхронизирует гильдии MMOCore.
 guild:
@@ -138,8 +140,8 @@ interest:
 # Переключение backend НЕ переносит данные автоматически.
 storage:
   type: sqlite
-  url: 'jdbc:mariadb://127.0.0.1:3306/azeroth'
-  user: azeroth
+  url: 'jdbc:mariadb://127.0.0.1:3306/terrawow'
+  user: terrawow
   password-env: AE_DB_PASSWORD
 
 xp:

@@ -1,0 +1,93 @@
+# Меню сервера
+
+Модуль `ru.terrawow.main.menu` заменил CommandPanels. Он включается флагом `modules.menus: true` в `config.yml`. Меню лежат в `plugins/TerraWoWmain/menus/*.yml`, и в одном файле может быть несколько меню. После правки выполните `/twm menu reload` или `/twm reload`.
+
+## Команды
+
+| Что | Команда | Кто может |
+|---|---|---|
+| Главное меню | `/menu`, `/wow`, `/twm menu` | все |
+| Любое меню | `/twm menu <id>` | все (себе) |
+| Открыть меню игроку | `twm menu <id> <ник>` | консоль или `twm.admin` |
+| Список меню / перечитать | `/twm menu list`, `/twm menu reload` | `twm.admin` |
+
+Кнопки MMOCore открывают меню из консоли: `dispatch_command{format="twm menu main <caster.name>";from_console=true;target={type=caster}}`. Кнопки «Главное меню» в окнах плагина (маунты, питомцы, раса) открывают `main` напрямую.
+
+## Какие меню есть и кто их делает
+
+| ID | Что | Создаёт |
+|---|---|---|
+| `main` | Главное меню (`/menu`) | `tools/wow_menu_panels.py` |
+| `professions` | Профессии | `tools/wow_menu_panels.py` |
+| `change_class` | Смена класса со сбросом | `tools/wow_menu_panels.py` |
+| `custom_classes` | Особые классы | `tools/install_custom_class.py` |
+| `class_<id>` | Карточка особого класса с выбором | `tools/install_custom_class.py` |
+
+Инструменты описывают меню так же, как раньше для CommandPanels, а `tools/twm_menus.py` переводит это в формат ниже. Если файл перезаписывает инструмент, правьте данные в инструменте. Свои меню можно писать руками в отдельный файл.
+
+## Формат
+
+```yaml
+main:                                  # ID меню
+  title: '<#8A5A12>✦ <#3A2410>Главное меню <#8A5A12>✦'
+  rows: 6                              # 1–6
+  fill: frame                          # этот предмет — во все пустые ячейки (необязательно)
+  items:
+    frame: {icon: BLACK_STAINED_GLASS_PANE, name: ' '}    # пустое имя = без подсказки
+    hero:
+      slot: 4                          # или slots: [0, 8, '45-53']
+      icon: 'head:{player}'            # MATERIAL | nexo:<id> | mmo:<TYPE>:<ID> | head:<ник>
+      model-data: 2058                 # custom model data (необязательно)
+      glint: true                      # блеск зачарования
+      name: '<#FFD100>{player}'
+      lore:
+      - '<gray>Класс: <white>%mmocore_class%'
+      - '&7Кошелёк: &6%twm_gold%'
+      click: [close, 'delay 1', 'console mmocore:player {player}']   # ЛКМ и ПКМ
+    class_choose:
+      slot: 13
+      show-if: '%mmocore_class_id% == HUMAN'   # в одной ячейке побеждает первый показанный
+      icon: BEACON
+      name: '<#1EFF00>✦ Выбрать класс'
+      click: [close, 'console mmocore:class {player}']
+    class_current:
+      slot: 13                         # покажется, если class_choose скрыт
+      icon: BEACON
+      name: '<#FFD100>Ваш класс: %mmocore_class%'
+      left-click: ['open change_class']
+      right-click: [close]
+      require: '%mmocore_level% >= 10'  # условие нажатия
+      deny: ['message <#FF4040>Нужен 10 уровень']
+```
+
+**Действия** выполняются по порядку:
+
+| Действие | Что делает |
+|---|---|
+| `close` | закрыть окно |
+| `open <id>` | открыть другое меню |
+| `delay <тики>` | подождать, 20 тиков = 1 секунда; остальное выполнится позже |
+| `console <команда>` | команда от консоли (для команд, которые игроку не разрешены) |
+| `player <команда>` | команда от игрока |
+| `chat </команда>` | игрок «пишет» в чат, нужно для команд, которые плагины ловят из чата |
+| `message <текст>` | сообщение игроку |
+| `sound <звук> [громкость] [тон]` | звук, например `sound ui.button.click 1 1.2` |
+
+**Тексты.** Работают цвета MiniMessage (`<gold>`, `<#FFD100>`, `<bold>`) и обычные `&`-коды. `{player}` заменяется на ник. Плейсхолдеры PlaceholderAPI (`%mmocore_level%`, `%twm_gold%`) работают в текстах, командах и условиях.
+
+**Условия** (`show-if`, `require`):
+- `a == b`, `a != b` — сравнение без учёта регистра;
+- `>`, `>=`, `<`, `<=` — для чисел;
+- `perm:узел` и `!perm:узел` — проверка права;
+- `&&` (и) и `||` (или) — объединение условий.
+
+Пустое условие всегда выполнено.
+
+**Ошибки.** Если в файле ошибка (неизвестное действие, ячейка вне окна, `open` несуществующего меню), модуль меню не запустится, а в консоли будет файл и место ошибки. Экономика и остальные модули при этом работают.
+
+## Переезд с CommandPanels
+
+`tools/migrate_cp_menus.py` (уже выполнен 12.11.2026):
+- перевёл все панели `CommandPanels/panels/*.yml` в `menus/`;
+- заменил в окнах MMOCore `pa open wow_<x>` на `twm menu <x>`;
+- перенёс плагин CommandPanels в `server/_setup-backup/commandpanels-<время>/`. Ничего не удалено: чтобы вернуть, перенесите файлы обратно.

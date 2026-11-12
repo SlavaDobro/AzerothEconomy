@@ -1,0 +1,63 @@
+# Перенесено из CommandPanels (wow_custom_classes.yml) — tools/migrate_cp_menus.py
+# Меню TerraWoWmain: /twm menu custom_classes
+custom_classes:
+  title: <#8A5A12>✦ <#3A2410>Особые классы <#8A5A12>✦
+  rows: 6
+  fill: frame
+  items:
+    trim:
+      slots:
+      - 0
+      - 8
+      - 45
+      - 53
+      icon: ORANGE_STAINED_GLASS_PANE
+      name: ' '
+    arctic_knight:
+      slots:
+      - 22
+      icon: STONE_SWORD
+      model-data: 2058
+      name: <#7FD6FF>Арктический рыцарь
+      lore:
+      - <dark_gray>Танк • Ближний бой • Лёд
+      - ''
+      - <#FFE88A>Легендарный воин вечной зимы. Ледяное копьё,
+      - <#FFE88A>кратеры льда и щит, что не пропускает врага.
+      - ''
+      - '<gray>Способностей: <white>7 <dark_gray>| <gray>веток талантов: <white>3'
+      - ''
+      - <#FFE88A>▸ Нажмите — подробнее и выбор
+      click:
+      - open class_arctic_knight
+    info:
+      slots:
+      - 4
+      icon: NETHER_STAR
+      name: <#FFD100>Особые классы
+      lore:
+      - <gray>Классы из особых наборов.
+      - '<gray>Пробные: их могут изменить или убрать.'
+      - ''
+      - <gray>Выбор класса — один раз.
+    back:
+      slots:
+      - 48
+      icon: ARROW
+      name: <#FFD100>◂ Классы Азерота
+      lore:
+      - <gray>Девять основных классов.
+      click:
+      - close
+      - delay 1
+      - console mmocore:class {player}
+    close:
+      slots:
+      - 50
+      icon: BARRIER
+      name: <#FF4040>Закрыть
+      click:
+      - close
+    frame:
+      icon: BLACK_STAINED_GLASS_PANE
+      name: ' '

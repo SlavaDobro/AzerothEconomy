@@ -131,10 +131,7 @@ final class RaceMenus implements Listener {
         m.racials.cast(p, r);
       });
     }
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), () -> {
-      p.closeInventory();
-      p.performCommand("menu");
-    });
+    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
     item(g, 49, "BARRIER", "<#FF4040>Закрыть", List.of(), p::closeInventory);
     open(p, g);
   }
@@ -239,7 +236,7 @@ final class RaceMenus implements Listener {
   public void close(InventoryCloseEvent e) {
     if (!(e.getInventory().getHolder() instanceof Page g) || !g.choosing || !(e.getPlayer() instanceof Player p)) return;
     if (navigating.contains(p.getUniqueId()) || e.getReason() == InventoryCloseEvent.Reason.DISCONNECT) return;
-    if (!m.config.forceChoice || p.hasPermission("terrawow.admin") || m.of(p.getUniqueId()).chosen()) return;
+    if (!m.config.forceChoice || p.hasPermission("twm.admin") || m.of(p.getUniqueId()).chosen()) return;
     Bukkit.getScheduler().runTaskLater(m.plugin, () -> {
       if (p.isOnline() && !m.of(p.getUniqueId()).chosen() && !(p.getOpenInventory().getTopInventory().getHolder() instanceof Page))
         factions(p);

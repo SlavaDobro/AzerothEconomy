@@ -3,99 +3,103 @@ version: 1.1.0
 main: ru.terrawow.main.TerraWoWmain
 api-version: '26.3'
 author: TerraWoW
-description: Основной плагин сервера TerraWoW (экономика Азерота и будущие системы)
+description: Основной плагин сервера TerraWoW (меню, экономика, маунты, питомцы, расы)
 load: POSTWORLD
 softdepend: [Vault, PlaceholderAPI]
-loadbefore: [MMOCore, MMOItems, CMI, CommandPanels]
+loadbefore: [MMOCore, MMOItems, CMI]
+# Все функции — подкоманды /twm: /twm economy, /twm mount, /twm pet, /twm race, /twm racial.
+# /menu (/wow), /mounts, /pets, /race, /racial — короткие варианты для игроков.
 commands:
-  aeconomy:
-    description: Экономика Азерота
-    usage: /aeconomy help
-  mounts:
-    description: Коллекция маунтов
-    aliases: [mount]
-    permission: terrawow.mounts
-  pets:
-    description: Коллекция питомцев
-    aliases: [pet]
-    permission: terrawow.pets
-  race:
-    description: Раса персонажа (выбор при первом входе; администратор — set/reset/info/open/reload)
-    usage: /race
-    permission: terrawow.race
-  racial:
-    description: Расовая способность
-    permission: terrawow.race
   twm:
-    description: TerraWoWmain — администрирование коллекции маунтов и питомцев
-    usage: /twm
-    permission: terrawow.admin
+    description: 'TerraWoWmain: /twm menu | economy | mount | pet | race | racial | reload'
+    usage: /twm help
+  mounts:
+    description: Маунты (то же, что /twm mount)
+    aliases: [mount]
+    permission: twm.mount
+  pets:
+    description: Питомцы (то же, что /twm pet)
+    aliases: [pet]
+    permission: twm.pet
+  race:
+    description: Раса (то же, что /twm race)
+    permission: twm.race
+  racial:
+    description: Расовая способность (то же, что /twm racial)
+    permission: twm.race
+  menu:
+    description: Главное меню сервера (то же, что /twm menu)
+    aliases: [wow]
 permissions:
-  azeroth.use:
+  twm.economy.use:
     default: true
-  azeroth.balance:
+  twm.economy.balance:
     default: true
-  azeroth.pay:
+  twm.economy.pay:
     default: true
-  azeroth.exchange:
+  twm.economy.exchange:
     default: true
-  azeroth.history:
+  twm.economy.history:
     default: true
-  azeroth.bank:
+  twm.economy.bank:
     default: true
-  azeroth.bank.buy:
+  twm.economy.bank.buy:
     default: true
-  azeroth.bank.rename:
+  twm.economy.bank.rename:
     default: true
-  azeroth.bank.money:
+  twm.economy.bank.money:
     default: true
-  azeroth.mail:
+  twm.economy.mail:
     default: true
-  azeroth.mail.send:
+  twm.economy.mail.send:
     default: true
-  azeroth.mail.claim:
+  twm.economy.mail.claim:
     default: true
-  azeroth.trade:
+  twm.economy.trade:
     default: true
-  azeroth.auction:
+  twm.economy.auction:
     default: true
-  azeroth.auction.sell:
+  twm.economy.auction.sell:
     default: true
-  azeroth.auction.buy:
+  twm.economy.auction.buy:
     default: true
-  azeroth.deposit:
+  twm.economy.deposit:
     default: true
-  azeroth.withdraw:
+  twm.economy.withdraw:
     default: true
-  azeroth.cheque:
+  twm.economy.cheque:
     default: true
-  azeroth.admin.money:
+  twm.economy.admin.money:
     default: op
-  azeroth.admin.reward:
+  twm.economy.admin.reward:
     default: op
-  azeroth.admin.npc:
+  twm.economy.admin.npc:
     default: op
-  azeroth.admin.diagnose:
+  twm.economy.admin.diagnose:
     default: op
-  azeroth.admin.backup:
+  twm.economy.admin.backup:
     default: op
-  azeroth.admin.recovery:
+  twm.economy.admin.recovery:
     default: op
-  azeroth.bank.remote:
+  twm.economy.bank.remote:
     default: op
-  azeroth.mail.remote:
+  twm.economy.mail.remote:
     default: op
-  azeroth.guild:
+  twm.economy.guild:
     default: true
-  azeroth.guild.create:
+  twm.economy.guild.create:
     default: op
-  azeroth.bank.xp:
+  twm.economy.bank.xp:
     default: true
-  terrawow.mounts:
+  twm.mount:
+    description: Журнал маунтов, призыв
     default: true
-  terrawow.race:
+  twm.pet:
+    description: Журнал питомцев, призыв
     default: true
-  terrawow.pets:
+  twm.race:
+    description: Карточка расы, выбор расы, расовая способность
     default: true
-  terrawow.admin:
+  twm.admin:
+    description: 'Админ-команды маунтов, питомцев и рас (give/take/unlock/set/reset/reload)'
     default: op

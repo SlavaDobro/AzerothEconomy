@@ -28,7 +28,7 @@ public final class Commands implements CommandExecutor, TabCompleter {
   }
 
   private static void need(String[] a, int n) {
-    if (a.length < n) throw new IllegalArgumentException("Недостаточно аргументов. /aeconomy help");
+    if (a.length < n) throw new IllegalArgumentException("Недостаточно аргументов. /twm economy help");
   }
 
   private void update(CommandSender s, Runnable r) {
@@ -269,7 +269,7 @@ public final class Commands implements CommandExecutor, TabCompleter {
         }
         case "cheque" -> cheque(player(s), a, op);
         case "guild" -> guild(player(s), a, op);
-        default -> throw new IllegalArgumentException("Неизвестная команда. /aeconomy help");
+        default -> throw new IllegalArgumentException("Неизвестная команда. /twm economy help");
       }
     } catch (Throwable e) {
       p.error(s, e);
@@ -441,7 +441,7 @@ public final class Commands implements CommandExecutor, TabCompleter {
                 to,
                 p.getConfig().getLong("trade.timeout-seconds") * 1000),
         () -> {
-          target.sendMessage("§eЗапрос торговли от " + pl.getName() + ". /aeconomy trade accept");
+          target.sendMessage("§eЗапрос торговли от " + pl.getName() + ". /twm economy trade accept");
           p.menus.trade(pl);
         });
   }
@@ -578,10 +578,7 @@ public final class Commands implements CommandExecutor, TabCompleter {
       ItemStack item = pl.getInventory().getItemInMainHand();
       if (!item.hasItemMeta()) throw new IllegalArgumentException("Это не чек");
       var pdc = item.getItemMeta().getPersistentDataContainer();
-      String current = pdc.get(key, PersistentDataType.STRING);
-      // cheques issued before the rename (the plugin was called AzerothEconomy)
-      String id = current != null ? current
-          : pdc.get(new NamespacedKey("azerotheconomy", "cheque"), PersistentDataType.STRING);
+      String id = pdc.get(key, PersistentDataType.STRING);
       if (id == null) throw new IllegalArgumentException("Это не чек");
       update(pl, () -> p.ledger.redeemVoucher(id, owner));
       return;
@@ -595,7 +592,7 @@ public final class Commands implements CommandExecutor, TabCompleter {
     ItemMeta meta = check.getItemMeta();
     meta.setDisplayName("§6Банковский чек");
     meta.setLore(
-        List.of("§e" + p.ledger.currency(c).format(n), "§7/aeconomy cheque redeem", "§8" + op));
+        List.of("§e" + p.ledger.currency(c).format(n), "§7/twm economy cheque redeem", "§8" + op));
     meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, op);
     check.setItemMeta(meta);
     byte[] bytes = check.serializeAsBytes();

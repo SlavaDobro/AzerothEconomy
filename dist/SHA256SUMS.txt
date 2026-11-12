@@ -1,2 +1,2 @@
-7ebf6cb264ca46196defe34b0ee018c5fe31adc69abd1f362d8c2bd4d9581f2d  TerraWoWmain-1.1.0.jar
-77847295512148dfa451cfade7c75ade1d766d423af0cec4d7cf78b50ac1662e  TerraWoWmain-1.1.0-sources.zip
+f84911c11a4fa1252f97584c876e0cd6bd94d8d9ba1a18df10163a3fa29c9203  TerraWoWmain-1.1.0.jar
+a58f4c25b76fa24bcf0f43b53c8706afe035fe558c3bc4e3b1787b513a226541  TerraWoWmain-1.1.0-sources.zip

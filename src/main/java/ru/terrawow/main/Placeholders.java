@@ -11,7 +11,7 @@ public final class Placeholders extends PlaceholderExpansion {
   }
 
   public String getIdentifier() {
-    return "aeconomy";
+    return "twm";
   }
 
   public String getAuthor() {

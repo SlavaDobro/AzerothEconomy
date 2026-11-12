@@ -10,7 +10,7 @@
 | VaultUnlocked | 2.20.3 (имя плагина Vault) | единственный legacy Economy, общие балансы, неверные суммы |
 | CMI / CMILib | 9.8.11.2 / 1.6.1.3 | Economy.Enabled=false; порядок загрузки, отсутствие перехвата коротких команд |
 | PlaceholderAPI | 2.12.3 | регистрация расширения и форматированный баланс |
-| CommandPanels | 4.2.5 | существующий wow_menu, формат команд [chat]/[delay], добавленная кнопка |
+| CommandPanels | 4.2.5 | **убран 12.11.2026**: его панели перенесены в меню TerraWoWmain (`menus/*.yml`, [MENUS.md](MENUS.md)) |
 | Nexo | 1.29.1 | публичный API itemFromId/build, реальный awakened_shaman_lifescepter через 4 маршрута |
 | MMOItems | 6.10.1-SNAPSHOT, файл 20261012.174833-69 | LONG_SWORD и soulbound через бинарное хранение, проверка передачи привязки |
 | MythicLib | 1.7.1-SNAPSHOT, файл 20261014.095819-18 | NBTItem и публичный MMOItems loader |
@@ -20,7 +20,7 @@
 | ModelEngine | R4.2.0 | совместная загрузка; модели не изменялись |
 | PacketEvents | 2.14.0 | совместная загрузка; собственных пакетов плагин не отправляет |
 
-MMOProfiles и иной менеджер нескольких профилей в составе JAR не обнаружены. `/character` — панель характеристик CommandPanels; MMOCore хранит данные аккаунта, guild-plugin=NONE. TerraWoWmain намеренно хранит баланс на UUID аккаунта. Если позднее появится переключение персонажей, валюта/банк останутся общими для аккаунта до отдельной миграции модели.
+MMOProfiles и иной менеджер нескольких профилей в составе JAR не обнаружены. MMOCore хранит данные аккаунта, guild-plugin=NONE. TerraWoWmain намеренно хранит баланс на UUID аккаунта. Если позднее появится переключение персонажей, валюта/банк останутся общими для аккаунта до отдельной миграции модели.
 
 Существующие `/menu`, `/character`, классы, способности и задания не перестраивались. Меняется только свободная кнопка 49 в wow_menu. Настройки CMI Vault.Money=true сохранены; Economy.Enabled=false сохранено. CMI DB не изменялась и не импортировалась. При проверке CMI содержала одну запись, сумма Balance=0, ненулевых Balance=0.
 
@@ -38,5 +38,5 @@ MMOProfiles и иной менеджер нескольких профилей �
 - [Nexo API](https://docs.nexomc.com/community-guides/api) — публичные itemFromId/build; асинхронная загрузка предметов учтена (получение при действии, не в onEnable).
 - [MMOItems Soulbound](https://docs.phoenixdevt.fr/mmoitems/features/soulbound.html) и [Default Configuration](https://docs.phoenixdevt.fr/mmoitems/general/default-config), локальные публичные сигнатуры текущего snapshot.
 - [PlaceholderAPI expansion](https://wiki.placeholderapi.com/developers/creating-a-placeholderexpansion/).
-- [CommandPanels](https://docs.commandpanels.net/), [CMI first run](https://www.zrips.net/cmi/first-run/).
+- [CMI first run](https://www.zrips.net/cmi/first-run/).
 - [UltraEconomy](https://ultraeconomy.com/) — сайт доступен как JS-приложение, закрытый код и платные ресурсы не извлекались.

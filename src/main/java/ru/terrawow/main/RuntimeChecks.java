@@ -91,7 +91,7 @@ final class RuntimeChecks {
       results.add("PASS Vault deposit/withdraw uses the same copper balance");
       if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
         String expanded =
-            me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(test, "%aeconomy_gold%");
+            me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(test, "%twm_gold%");
         if (!expanded.equals(p.ledger.currency("gold").format(0)))
           throw new AssertionError("PlaceholderAPI expansion");
         results.add("PASS PlaceholderAPI registered expansion and formatted balance");

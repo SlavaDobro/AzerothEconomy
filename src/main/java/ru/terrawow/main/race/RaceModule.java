@@ -25,9 +25,9 @@ import ru.terrawow.main.collection.Text;
 import ru.terrawow.main.race.RaceConfig.*;
 
 /**
- * Races of Azeroth: Alliance / Horde, 12 races, gender, height (minecraft:scale), passive bonuses
+ * WoW races: Alliance / Horde, 12 races, gender, height (minecraft:scale), passive bonuses
  * (MythicLib stats + Minecraft attributes), a racial ability (/racial), class rules for MMOCore and
- * a random race skin. Choosing is once (first join); only an admin changes it (/race set|reset).
+ * a random race skin. Choosing is once (first join); only an admin changes it (/twm race set|reset).
  */
 public final class RaceModule implements Listener, CommandExecutor, TabCompleter {
   final JavaPlugin plugin;
@@ -109,7 +109,7 @@ public final class RaceModule implements Listener, CommandExecutor, TabCompleter
   /** The player's own choice from the menu: once. */
   void choose(Player p, Race race, Gender g) {
     PlayerRace r = of(p.getUniqueId());
-    if (r.chosen() && !p.hasPermission("terrawow.admin")) {
+    if (r.chosen() && !p.hasPermission("twm.admin")) {
       msg(p, "&cРаса уже выбрана. Сменить её может только администратор.");
       return;
     }
@@ -288,21 +288,40 @@ public final class RaceModule implements Listener, CommandExecutor, TabCompleter
   }
 
   // ---------------------------------------------------------------- commands
+  /** Short commands /race and /racial: the same as /twm race and /twm racial. */
   @Override
   public boolean onCommand(CommandSender s, Command cmd, String label, String[] a) {
+    if (cmd.getName().equals("racial")) racial(s);
+    else race(s, a);
+    return true;
+  }
+
+  /** /twm racial — cast the racial ability. */
+  public void racial(CommandSender s) {
     try {
-      if (cmd.getName().equals("racial")) {
-        Player p = player(s);
-        racials.cast(p, raceOf(p).orElseThrow(() -> new IllegalArgumentException("Сначала выберите расу: /race")));
-        return true;
-      }
+      Player p = player(s);
+      if (!p.hasPermission("twm.race")) throw new IllegalArgumentException("Нет права twm.race");
+      racials.cast(p, raceOf(p).orElseThrow(() -> new IllegalArgumentException("Сначала выберите расу: /twm race")));
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      s.sendMessage(Text.c("&c" + e.getMessage()));
+    }
+  }
+
+  /** /twm race [set|reset|info|open|reload|help]. Без подкоманды — карточка расы или выбор. */
+  public void race(CommandSender s, String[] a) {
+    try {
       if (a.length == 0) {
         Player p = player(s);
+        if (!p.hasPermission("twm.race")) throw new IllegalArgumentException("Нет права twm.race");
         if (of(p.getUniqueId()).chosen()) menus.info(p);
         else menus.factions(p);
-        return true;
+        return;
       }
-      if (!s.hasPermission("terrawow.admin")) throw new IllegalArgumentException("Нет прав.");
+      if (a[0].equalsIgnoreCase("help")) {
+        help(s);
+        return;
+      }
+      if (!s.hasPermission("twm.admin")) throw new IllegalArgumentException("Нет права twm.admin");
       switch (a[0].toLowerCase(Locale.ROOT)) {
         case "set" -> {
           need(a, 3);
@@ -344,17 +363,16 @@ public final class RaceModule implements Listener, CommandExecutor, TabCompleter
     } catch (IllegalArgumentException | IllegalStateException e) {
       s.sendMessage(Text.c("&c" + e.getMessage()));
     }
-    return true;
   }
 
   private static void help(CommandSender s) {
-    s.sendMessage(Text.c("&6/race &7— ваша раса (или выбор)  &6/racial &7— расовая способность"));
-    s.sendMessage(Text.c("&6/race set <ник> <раса> [male|female] &7| &6/race reset <ник> &7| &6/race info [ник]"));
-    s.sendMessage(Text.c("&6/race open <ник> &7— окно выбора &7| &6/race reload"));
+    s.sendMessage(Text.c("&6/twm race &7— ваша раса или выбор (/race)  &6/twm racial &7— расовая способность (/racial)"));
+    s.sendMessage(Text.c("&6/twm race set <ник> <раса> [male|female] &7| &6/twm race reset <ник> &7| &6/twm race info [ник]"));
+    s.sendMessage(Text.c("&6/twm race open <ник> &7— окно выбора &7| &6/twm race reload"));
   }
 
   private static void need(String[] a, int n) {
-    if (a.length < n) throw new IllegalArgumentException("Не хватает аргументов. /race help");
+    if (a.length < n) throw new IllegalArgumentException("Не хватает аргументов. /twm race help");
   }
 
   private static Player player(CommandSender s) {
@@ -370,9 +388,15 @@ public final class RaceModule implements Listener, CommandExecutor, TabCompleter
 
   @Override
   public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
-    if (!cmd.getName().equals("race") || !s.hasPermission("terrawow.admin")) return List.of();
+    return cmd.getName().equals("race") ? tab(s, a) : List.of();
+  }
+
+  /** Tab completion for /twm race … and /race. */
+  public List<String> tab(CommandSender s, String[] a) {
+    if (a.length == 0) return List.of();
+    if (!s.hasPermission("twm.admin")) return a.length == 1 ? List.of("help") : List.of();
     List<String> out = switch (a.length) {
-      case 1 -> List.of("set", "reset", "info", "open", "reload");
+      case 1 -> List.of("help", "set", "reset", "info", "open", "reload");
       case 2 -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
       case 3 -> a[0].equalsIgnoreCase("set") ? new ArrayList<>(config.races.keySet()) : List.of();
       case 4 -> a[0].equalsIgnoreCase("set") ? List.of("male", "female") : List.of();

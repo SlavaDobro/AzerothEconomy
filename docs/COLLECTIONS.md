@@ -68,15 +68,15 @@ pets:
 
 | Действие | Команда | Право |
 |---|---|---|
-| Журнал маунтов | `/mounts` (`/mount`) | `terrawow.mounts` (true) |
-| Журнал питомцев | `/pets` (`/pet`) | `terrawow.pets` (true) |
-| Разблокировать маунта со всеми обликами | `/twm unlock <id\|all> [ник]` (без ника — себе) | `terrawow.admin` (op) |
-| Выдать / забрать | `/twm give\|take <ник> <mount\|pet> <id> [облик]` | `terrawow.admin` (op) |
-| Список ID | `/twm list` | `terrawow.admin` |
-| Открыть журнал игроку | `/twm open <mounts\|pets> <ник>` | `terrawow.admin` |
-| Призвать / отозвать за игрока | `/twm summon <ник> <mount\|pet> <id>`, `/twm dismiss <ник> <mount\|pet>` | `terrawow.admin` |
-| Перечитать collections.yml | `/twm reload` | `terrawow.admin` |
+| Журнал маунтов | `/mounts` (`/mount`) | `twm.mount` (true) |
+| Журнал питомцев | `/pets` (`/pet`) | `twm.pet` (true) |
+| Разблокировать маунта со всеми обликами | `/twm mount\|pet unlock <id\|all> [ник]` (без ника — себе) | `twm.admin` (op) |
+| Выдать / забрать | `/twm mount\|pet give\|take <ник> <id> [облик]` | `twm.admin` (op) |
+| Список ID | `/twm mount\|pet list [ник]` | `twm.admin` |
+| Открыть журнал игроку | `/twm mount\|pet open <ник>` | `twm.admin` |
+| Призвать / отозвать за игрока | `/twm mount\|pet summon <ник> <id>`, `/twm mount\|pet dismiss <ник>` | `twm.admin` |
+| Перечитать collections.yml | `/twm mount reload` или `/twm reload` | `twm.admin` |
 
-`/twm` работает из консоли, поэтому награды можно выдавать из квестов, MythicMobs (`command{c="twm give <target.name> mount invincible"}`), CommandPanels `[console]` и т. п. Повторная выдача ничего не ломает. `give … <id> <облик>` выдаёт и сам маунт, если его ещё не было.
+`/twm` работает из консоли, поэтому награды можно выдавать из квестов, MythicMobs (`command{c="twm mount give <target.name> invincible"}`), кнопок меню (`console …`, [MENUS.md](MENUS.md)) и т. п. Повторная выдача ничего не ломает. `give … <id> <облик>` выдаёт и сам маунт, если его ещё не было.
 
 Данные игроков хранятся в `plugins/TerraWoWmain/collections/players/<uuid>.yml`: что получено, выбранные облики и последний питомец. Запись атомарная, через временный файл.
