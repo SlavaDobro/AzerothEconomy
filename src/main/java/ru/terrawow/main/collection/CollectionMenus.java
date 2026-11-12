@@ -49,9 +49,7 @@ final class CollectionMenus implements Listener {
     frame(g);
     String active = m.activeMob(p, kind);
     item(g, 4, kind == Kind.MOUNT ? "SADDLE" : "LEAD", "<#FFD100>" + title, List.of(
-        "&7Собрано: &f" + owned + " &8/ &f" + all.size(), "",
-        kind == Kind.MOUNT ? "&7ЛКМ — призвать (3 сек., не двигайтесь)" : "&7ЛКМ — призвать или отозвать",
-        "&7ПКМ — выбрать облик"), false);
+        "&7Собрано: &f" + owned + " &8/ &f" + all.size()), false);
     int from = page * GRID.length;
     for (int i = 0; i < GRID.length && from + i < all.size(); i++) {
       Entry e = all.get(from + i);
@@ -86,24 +84,30 @@ final class CollectionMenus implements Listener {
       }
     }
     final int prev = page - 1, next = page + 1;
-    if (page > 0) item(g, 47, "ARROW", "<#FFD100>◂ Назад", List.of(), false, () -> list(p, kind, prev));
-    if (page < pages - 1) item(g, 51, "ARROW", "<#FFD100>Вперёд ▸", List.of(), false, () -> list(p, kind, next));
+    // standard bottom row: main menu (left), pages, help (centre), this window's action (right)
+    if (page > 0) item(g, 47, "ARROW", "<#FFD100>◂ Предыдущая страница", List.of(), false, () -> list(p, kind, prev));
+    if (page < pages - 1) item(g, 51, "ARROW", "<#FFD100>Следующая страница ▸", List.of(), false, () -> list(p, kind, next));
     if (kind == Kind.MOUNT)
-      item(g, 48, "LEAD", "<#FF4040>Спешиться", List.of("&7Сойти с маунта.", "&7В воздухе — медленное падение."), false, () -> {
+      item(g, 53, "LEAD", "<#FF4040>Спешиться", List.of("&7Сойти с маунта.", "&7В воздухе — медленное падение."), false, () -> {
         p.closeInventory();
         m.dismiss(p, Kind.MOUNT, true);
       });
     else
-      item(g, 48, "BARRIER", "<#FF4040>Отозвать питомца", List.of("&7Питомец вернётся домой."), false, () -> {
+      item(g, 53, "BARRIER", "<#FF4040>Отозвать питомца", List.of("&7Питомец уйдёт."), false, () -> {
         p.closeInventory();
         m.dismiss(p, Kind.PET, true);
       });
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), false,
-        () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
-    Kind other = kind == Kind.MOUNT ? Kind.PET : Kind.MOUNT;
-    item(g, 53, other == Kind.PET ? "LEAD" : "SADDLE", "<#FFD100>" + (other == Kind.PET ? "Питомцы ▸" : "Маунты ▸"), List.of(), false,
-        () -> list(p, other, 0));
-    item(g, 49, "BARRIER", "<#FF4040>Закрыть", List.of(), false, p::closeInventory);
+    mainMenu(g, p);
+    help(g, kind == Kind.MOUNT
+        ? List.of("Здесь ваши маунты. Сначала — полученные,", "серые — ещё не получены (наведите: где взять).", "",
+            "1. ЛКМ по маунту — призыв за 3 секунды.", "   Стойте на земле и не двигайтесь.",
+            "2. ПКМ по маунту — выбрать облик (скин).", "",
+            "Летающий: Пробел — вверх, Shift — вниз,", "на земле Shift — спешиться.",
+            "«Спешиться» справа внизу — сойти сразу.")
+        : List.of("Здесь ваши питомцы. Сначала — полученные,", "серые — ещё не получены (наведите: где взять).", "",
+            "1. ЛКМ по питомцу — позвать его.", "   Повторный ЛКМ — отозвать.",
+            "2. ПКМ по питомцу — выбрать облик (скин).", "",
+            "Питомец ходит за вами и возвращается", "после смерти и перезахода."));
     p.openInventory(g.inv);
   }
 
@@ -117,7 +121,7 @@ final class CollectionMenus implements Listener {
     Page g = new Page(p, "<#8A5A12>✦ <#3A2410>Облики • " + strip(e.name()) + " <#8A5A12>✦");
     frame(g);
     Skin current = c.skinOf(e);
-    item(g, 4, e.icon(), e.name(), List.of("&7Выберите облик.", "&7Выбор сохраняется."), false);
+    item(g, 4, e.icon(), e.name(), List.of("&7Облики: &f" + ownedSkins(c, e) + " &8/ &f" + e.skins().size()), false);
     int i = 0;
     for (Skin s : e.skins().values()) {
       if (i >= GRID.length) break;
@@ -134,9 +138,24 @@ final class CollectionMenus implements Listener {
         skins(p, e);
       });
     }
-    item(g, 45, "ARROW", "<#FFD100>◂ Назад", List.of(), false, () -> list(p, e.kind(), 0));
-    item(g, 49, "BARRIER", "<#FF4040>Закрыть", List.of(), false, p::closeInventory);
+    mainMenu(g, p);
+    item(g, 48, "ARROW", "<#FFD100>◂ Назад: " + (e.kind() == Kind.MOUNT ? "маунты" : "питомцы"), List.of(), false,
+        () -> list(p, e.kind(), 0));
+    help(g, List.of("Облики (скины) этого " + (e.kind() == Kind.MOUNT ? "маунта." : "питомца."), "",
+        "ЛКМ по полученному облику — выбрать его.", "Выбор сохраняется" + (e.kind() == Kind.MOUNT
+            ? " и появится при следующем призыве." : ", питомец сменится сразу."), "",
+        "Серые облики ещё не получены."));
     p.openInventory(g.inv);
+  }
+
+  // ---------------------------------------------------------------- standard bottom row
+  private void mainMenu(Page g, Player p) {
+    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."), false,
+        () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
+  }
+
+  private void help(Page g, List<String> lines) {
+    item(g, 49, "BOOK", "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), false);
   }
 
   // ---------------------------------------------------------------- helpers

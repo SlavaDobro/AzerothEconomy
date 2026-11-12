@@ -9,7 +9,6 @@ main:
       slots:
       - 0
       - 8
-      - 45
       - 53
       icon: ORANGE_STAINED_GLASS_PANE
       name: ' '
@@ -30,118 +29,6 @@ main:
       - close
       - delay 1
       - console mmocore:player {player}
-    character:
-      slots:
-      - 19
-      icon: ARMOR_STAND
-      name: <#FFD100>Персонаж
-      lore:
-      - <gray>Уровень, боевые показатели,
-      - <gray>характеристики и профессии.
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - console mmocore:player {player}
-    spellbook:
-      slots:
-      - 21
-      icon: ENCHANTED_BOOK
-      name: <#FFD100>Книга заклинаний
-      lore:
-      - <gray>Заклинания класса и 9 ячеек.
-      - '<gray>Применение: <white>F<gray>, затем <white>1–9<gray>.'
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /mmocore:skills
-    talents:
-      slots:
-      - 23
-      icon: NETHER_STAR
-      name: <#FFD100>Таланты
-      lore:
-      - <gray>Три ветки талантов вашего класса.
-      - '<gray>Свободно очков: <white>%mmocore_skill_tree_points_global%'
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /mmocore:skilltrees
-    attributes:
-      slots:
-      - 25
-      icon: GOLDEN_APPLE
-      name: <#FFD100>Характеристики
-      lore:
-      - <gray>Сила, ловкость, выносливость,
-      - <gray>интеллект и дух.
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /mmocore:attributes
-    professions:
-      slots:
-      - 28
-      icon: CRAFTING_TABLE
-      name: <#FFD100>Профессии
-      lore:
-      - <gray>9 основных и 3 вспомогательные
-      - <gray>профессии, навык до 300.
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - open professions
-    mounts:
-      slots:
-      - 30
-      icon: SADDLE
-      name: <#FFD100>Маунты
-      lore:
-      - <gray>Ездовые и летающие животные.
-      - <gray>Призыв — 3 секунды, и вы в седле.
-      - <gray>Облики маунтов — ПКМ в журнале.
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /twm mount
-    pets:
-      slots:
-      - 32
-      icon: LEAD
-      name: <#FFD100>Питомцы
-      lore:
-      - <gray>Спутники, что всюду следуют за вами.
-      - <gray>Облики питомцев — ПКМ в журнале.
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /twm pet
-    economy:
-      slots:
-      - 34
-      icon: GOLD_INGOT
-      name: <#FFD100>Экономика
-      lore:
-      - <gray>Кошелёк, банк, почта, торговля
-      - <gray>и аукцион.
-      - '<gray>Монеты: <#FFD100>%twm_gold%'
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /twm economy
     class_choose:
       slots:
       - 13
@@ -170,9 +57,136 @@ main:
       - <dark_gray>Смена класса сбрасывает весь прогресс класса.
       click:
       - open change_class
+    label_hero:
+      slots:
+      - 18
+      icon: YELLOW_STAINED_GLASS_PANE
+      name: <#FFD100>◆ Ваш герой ▸
+      lore:
+      - <gray>Персонаж, заклинания, таланты,
+      - <gray>характеристики и профессии.
+    character:
+      slots:
+      - 20
+      icon: ARMOR_STAND
+      name: <#FFD100>Персонаж
+      lore:
+      - <gray>Уровень, боевые показатели,
+      - <gray>характеристики и профессии.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - console mmocore:player {player}
+    spellbook:
+      slots:
+      - 21
+      icon: ENCHANTED_BOOK
+      name: <#FFD100>Книга заклинаний
+      lore:
+      - <gray>Заклинания класса и 9 ячеек.
+      - '<gray>Применение: <white>F<gray>, затем <white>1–9<gray>.'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:skills
+    talents:
+      slots:
+      - 22
+      icon: NETHER_STAR
+      name: <#FFD100>Таланты
+      lore:
+      - <gray>Три ветки талантов вашего класса.
+      - '<gray>Свободно очков: <white>%mmocore_skill_tree_points_global%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:skilltrees
+    attributes:
+      slots:
+      - 23
+      icon: GOLDEN_APPLE
+      name: <#FFD100>Характеристики
+      lore:
+      - <gray>Сила, ловкость, выносливость,
+      - <gray>интеллект и дух.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /mmocore:attributes
+    professions:
+      slots:
+      - 24
+      icon: CRAFTING_TABLE
+      name: <#FFD100>Профессии
+      lore:
+      - <gray>9 основных и 3 вспомогательные
+      - <gray>профессии, навык до 300.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - open professions
+    label_world:
+      slots:
+      - 27
+      icon: LIGHT_BLUE_STAINED_GLASS_PANE
+      name: <#69CCF0>◆ Мир Азерота ▸
+      lore:
+      - <gray>Раса, маунты, питомцы,
+      - <gray>путешествия и деньги.
+    race:
+      slots:
+      - 29
+      icon: TOTEM_OF_UNDYING
+      name: <#FFD100>Раса
+      lore:
+      - <gray>Ваша раса, фракция и расовые
+      - '<gray>особенности. Способность: <white>/twm racial'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm race
+    mounts:
+      slots:
+      - 30
+      icon: SADDLE
+      name: <#FFD100>Маунты
+      lore:
+      - <gray>Ездовые и летающие животные.
+      - <gray>Призыв — 3 секунды, и вы в седле.
+      - <gray>Облики маунтов — ПКМ в журнале.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm mount
+    pets:
+      slots:
+      - 31
+      icon: LEAD
+      name: <#FFD100>Питомцы
+      lore:
+      - <gray>Спутники, что всюду следуют за вами.
+      - <gray>Облики питомцев — ПКМ в журнале.
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm pet
     travel:
       slots:
-      - 37
+      - 32
       icon: COMPASS
       name: <#FFD100>Путешествия
       lore:
@@ -183,6 +197,28 @@ main:
       - close
       - delay 1
       - console mmocore:waypoints {player}
+    economy:
+      slots:
+      - 33
+      icon: GOLD_INGOT
+      name: <#FFD100>Экономика
+      lore:
+      - <gray>Кошелёк, банк, почта, торговля
+      - <gray>и аукцион.
+      - '<gray>Монеты: <#FFD100>%twm_gold%'
+      - ''
+      - <#FFE88A>▸ Нажмите, чтобы открыть
+      click:
+      - close
+      - delay 1
+      - chat /twm economy
+    label_social:
+      slots:
+      - 36
+      icon: LIME_STAINED_GLASS_PANE
+      name: <#1EFF00>◆ Сообщество ▸
+      lore:
+      - <gray>Группа, друзья и гильдия.
     party:
       slots:
       - 39
@@ -199,7 +235,7 @@ main:
       - chat /mmocore:party
     friends:
       slots:
-      - 41
+      - 40
       icon: WRITABLE_BOOK
       name: <#FFD100>Друзья
       lore:
@@ -212,7 +248,7 @@ main:
       - chat /mmocore:friends
     guild:
       slots:
-      - 43
+      - 41
       icon: WHITE_BANNER
       name: <#FFD100>Гильдия
       lore:
@@ -223,39 +259,30 @@ main:
       - close
       - delay 1
       - chat /mmocore:guild
-    help:
-      slots:
-      - 48
-      icon: BOOK
-      name: <#FFD100>Подсказки
-      lore:
-      - '<gray>Меню: <white>/menu'
-      - '<gray>Заклинания: <white>/skills <dark_gray>• <gray>таланты: <white>/talents'
-      - '<gray>Каст: <white>F<gray>, затем <white>1–9'
-      - <gray>С 10-го уровня — 1 очко таланта за уровень.
-    race:
-      slots:
-      - 49
-      icon: TOTEM_OF_UNDYING
-      name: <#FFD100>Раса
-      lore:
-      - <gray>Ваша раса, фракция и расовые
-      - '<gray>особенности. Способность: <white>/twm racial'
-      - ''
-      - <#FFE88A>▸ Нажмите, чтобы открыть
-      click:
-      - close
-      - delay 1
-      - chat /twm race
     close:
       slots:
-      - 50
+      - 45
       icon: BARRIER
-      name: <#FF4040>Закрыть
+      name: <#FF4040>✘ Закрыть
       lore:
-      - <gray>Вернуться в игру.
+      - <gray>Закрыть меню и вернуться в игру.
       click:
       - close
+    help:
+      slots:
+      - 49
+      icon: BOOK
+      name: <#FFD100>❓ Как пользоваться
+      lore:
+      - <gray>Это главное меню — отсюда открываются
+      - <gray>все окна сервера. Наведите на кнопку,
+      - <gray>чтобы прочитать, что в ней, и нажмите.
+      - ''
+      - <gray>В каждом окне слева внизу —
+      - '<#FFE88A>◂ Главное меню<gray>: вернуться сюда.'
+      - '<gray>В центре внизу — <#FFE88A>❓<gray>: подсказка к окну.'
+      - ''
+      - '<gray>Открыть меню: <white>/menu <gray>или <white>/wow'
     frame:
       icon: BLACK_STAINED_GLASS_PANE
       name: ' '

@@ -9,7 +9,6 @@ class_arctic_knight:
       slots:
       - 0
       - 8
-      - 45
       - 53
       icon: ORANGE_STAINED_GLASS_PANE
       name: ' '
@@ -154,16 +153,29 @@ class_arctic_knight:
       slots:
       - 48
       icon: ARROW
-      name: <#FFD100>◂ Особые классы
+      name: '<#FFD100>◂ Назад: особые классы'
       click:
       - open custom_classes
-    close:
-      slots:
-      - 50
-      icon: BARRIER
-      name: <#FF4040>Закрыть
-      click:
-      - close
     frame:
       icon: BLACK_STAINED_GLASS_PANE
       name: ' '
+    main_menu:
+      slots:
+      - 45
+      icon: NETHER_STAR
+      name: <#FFD100>◂ Главное меню
+      lore:
+      - <gray>Вернуться в главное меню.
+      click:
+      - open main
+    help:
+      slots:
+      - 49
+      icon: BOOK
+      name: <#FFD100>❓ Как пользоваться
+      lore:
+      - <gray>Вверху — класс, ниже — его заклинания
+      - <gray>и три ветки талантов (наведите на них).
+      - ''
+      - <gray>Зелёная кнопка — стать этим классом.
+      - <gray>Работает, пока класс не выбран.

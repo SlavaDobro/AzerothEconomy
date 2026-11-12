@@ -35,14 +35,25 @@ public final class Menus implements Listener {
     }
   }
 
-  private Page page(Player player, String title, Runnable back) {
+  /**
+   * Standard bottom row of every window: 45 main menu, 48 back (inside the economy), 49 help for this
+   * window; the window's own actions use the other bottom slots.
+   */
+  private Page page(Player player, String title, Runnable back, String... help) {
     Page m = new Page(player, "§6" + title);
-    put(m, 45, Material.ARROW, p.text("back"), List.of(), back);
-    put(m, 49, Material.BARRIER, p.text("close"), List.of(), player::closeInventory);
+    put(m, 45, Material.NETHER_STAR, "◂ Главное меню", List.of("Вернуться в главное меню (/menu)."),
+        () -> MainMenu.open(p, player));
+    if (back != null) put(m, 48, Material.ARROW, "◂ " + p.text("back"), List.of(), back);
+    if (help.length > 0) put(m, 49, Material.BOOK, "❓ Как пользоваться", List.of(help), null);
     return m;
   }
 
   private void show(Player player, Page page) {
+    ItemStack pane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+    ItemMeta meta = pane.getItemMeta();
+    meta.setHideTooltip(true);
+    pane.setItemMeta(meta);
+    for (int s = 45; s < 54; s++) if (page.inventory.getItem(s) == null) page.inventory.setItem(s, pane);
     if (player.isOnline()) player.openInventory(page.inventory);
   }
 
@@ -82,7 +93,7 @@ public final class Menus implements Listener {
   }
 
   public void confirm(Player player, String description, Runnable action, Runnable back) {
-    Page m = page(player, p.text("confirmation"), back);
+    Page m = page(player, p.text("confirmation"), back, "Подтвердите действие кнопкой", "в центре или вернитесь назад.");
     put(
         m,
         22,
@@ -99,7 +110,7 @@ public final class Menus implements Listener {
 
   public void home(Player player) {
     p.check(player, "use");
-    Page m = page(player, p.text("home"), player::closeInventory);
+    Page m = page(player, p.text("home"), null, "Деньги и вещи вашего персонажа.", "", "Нажмите на раздел: кошелёк, банк,", "почта, торговля, аукцион, история,", "получение вещей.");
     put(
         m,
         10,
@@ -165,7 +176,7 @@ public final class Menus implements Listener {
 
   private void wallet(Player player, int page) {
     p.check(player, "balance");
-    Page m = page(player, p.text("wallet"), () -> home(player));
+    Page m = page(player, p.text("wallet"), () -> home(player), "Ваши деньги и другие валюты.", "", "Перевести золото игроку:", "/twm economy pay <ник> gold <сумма>", "Например: 1g 20s — 1 золотая 20 серебряных.");
     int i = 0, visible = 0;
     for (var c : p.ledger.currencies.values()) {
       try {
@@ -210,7 +221,7 @@ public final class Menus implements Listener {
     p.async(
         () -> p.ledger.tabs(owner),
         tabs -> {
-          Page m = page(player, p.text("bank"), () -> home(player));
+          Page m = page(player, p.text("bank"), () -> home(player), "Ваш банк: вкладки для вещей.", "", "1. Нажмите вкладку, чтобы открыть.", "2. Купить новую вкладку — кнопка ниже.");
           int i = 0;
           for (var tab : tabs) {
             int index = (int) num(tab, "tab");
@@ -266,7 +277,7 @@ public final class Menus implements Listener {
     p.async(
         () -> p.ledger.assets(owner, "BANK:" + tab),
         rows -> {
-          Page m = page(player, p.text("bank") + " • " + (tab + 1), () -> bank(player));
+          Page m = page(player, p.text("bank") + " • " + (tab + 1), () -> bank(player), "Положить вещь: возьмите её в руку", "и нажмите воронку «Внести предмет».", "Забрать: нажмите на вещь в банке.", "", "Мало места — купите 9 ячеек кнопкой ниже.");
           int i = 0;
           for (var row : rows)
             if (i < 45)
@@ -334,7 +345,7 @@ public final class Menus implements Listener {
     p.async(
         () -> p.ledger.assets(owner, "INBOX"),
         rows -> {
-          Page m = page(player, p.text("inbox"), () -> home(player));
+          Page m = page(player, p.text("inbox"), () -> home(player), "Вещи, которые ждут вас: из почты,", "торговли, аукциона и наград.", "", "Нажмите на вещь, чтобы забрать её.");
           int start = Ledger.offset(page);
           for (int i = start; i < Math.min(start + 45, rows.size()); i++) {
             var row = rows.get(i);
@@ -365,7 +376,7 @@ public final class Menus implements Listener {
     p.async(
         () -> p.ledger.mails(player.getUniqueId().toString(), page),
         rows -> {
-          Page m = page(player, p.text("mail"), () -> home(player));
+          Page m = page(player, p.text("mail"), () -> home(player), "Ваши письма.", "", "Нажмите письмо, чтобы прочитать", "и забрать вложения.", "Написать — кнопка справа внизу.");
           int i = 0;
           for (var row : rows)
             put(
@@ -404,7 +415,7 @@ public final class Menus implements Listener {
         () -> Map.entry(p.ledger.mail(owner, id), p.ledger.assets(owner, "MAIL:" + id)),
         result -> {
           var row = result.getKey();
-          Page m = page(player, str(row, "subject"), () -> mailbox(player, 0));
+          Page m = page(player, str(row, "subject"), () -> mailbox(player, 0), "Письмо: текст, деньги и вещи.", "", "Нажмите вложение, чтобы забрать.", "Ответить или вернуть отправителю —", "кнопки внизу.");
           int i = 0;
           Runnable claimAll = () -> claim(player, id, "all");
           for (var asset : result.getValue()) {
@@ -517,7 +528,7 @@ public final class Menus implements Listener {
     p.async(
         () -> p.ledger.lots(query, mine ? owner : "", page),
         rows -> {
-          Page m = page(player, p.text("auction"), () -> home(player));
+          Page m = page(player, p.text("auction"), () -> home(player), "Лоты других игроков.", "", "Нажмите лот, чтобы купить:", "вещь придёт почтой.", "Продать: возьмите вещь в руку и", "/twm economy auction sell <цена>");
           int i = 0;
           for (var row : rows) {
             String id = str(row, "id"), price = p.ledger.currency("gold").format(num(row, "price"));
@@ -588,7 +599,7 @@ public final class Menus implements Listener {
         t -> {
           String id = str(t, "id"), a = str(t, "a"), b = str(t, "b");
           if (str(t, "state").equals("REQUEST")) {
-            Page m = page(player, p.text("trade"), () -> home(player));
+            Page m = page(player, p.text("trade"), () -> home(player), "Обмен с другим игроком.", "", "1. Положите вещь из руки и деньги.", "2. Оба нажимают «Подтвердить».", "Любое изменение снимает подтверждения.");
             if (b.equals(owner))
               put(
                   m,
@@ -618,7 +629,7 @@ public final class Menus implements Listener {
                       p.ledger.assets(b, "TRADE:" + id),
                       p.ledger.offers(id)),
               lists -> {
-                Page m = page(player, p.text("trade"), () -> home(player));
+                Page m = page(player, p.text("trade"), () -> home(player), "Обмен с другим игроком.", "", "1. Положите вещь из руки и деньги.", "2. Оба нажимают «Подтвердить».", "Любое изменение снимает подтверждения.");
                 for (int side = 0; side < 2; side++) {
                   int slot = side == 0 ? 0 : 18;
                   for (var item : lists.get(side)) {
@@ -733,7 +744,7 @@ public final class Menus implements Listener {
     p.async(
         () -> items ? p.ledger.auditItems(owner, page) : p.ledger.history(owner, page),
         rows -> {
-          Page m = page(player, p.text("history"), () -> home(player));
+          Page m = page(player, p.text("history"), () -> home(player), "Последние операции с деньгами:", "переводы, покупки, почта.");
           int i = 0;
           for (var row : rows)
             put(

@@ -9,7 +9,6 @@ custom_classes:
       slots:
       - 0
       - 8
-      - 45
       - 53
       icon: ORANGE_STAINED_GLASS_PANE
       name: ' '
@@ -44,20 +43,34 @@ custom_classes:
       slots:
       - 48
       icon: ARROW
-      name: <#FFD100>◂ Классы Азерота
+      name: '<#FFD100>◂ Назад: основные классы'
       lore:
       - <gray>Девять основных классов.
       click:
       - close
       - delay 1
       - console mmocore:class {player}
-    close:
-      slots:
-      - 50
-      icon: BARRIER
-      name: <#FF4040>Закрыть
-      click:
-      - close
     frame:
       icon: BLACK_STAINED_GLASS_PANE
       name: ' '
+    main_menu:
+      slots:
+      - 45
+      icon: NETHER_STAR
+      name: <#FFD100>◂ Главное меню
+      lore:
+      - <gray>Вернуться в главное меню.
+      click:
+      - open main
+    help:
+      slots:
+      - 49
+      icon: BOOK
+      name: <#FFD100>❓ Как пользоваться
+      lore:
+      - <gray>Здесь классы из особых наборов.
+      - <gray>1. Наведите на класс — описание.
+      - <gray>2. Нажмите — подробнее и выбор.
+      - ''
+      - <gray>Выбрать можно, пока класс не выбран.
+      - '<gray>Пробные: их могут изменить или убрать.'

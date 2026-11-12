@@ -57,6 +57,8 @@ final class RaceMenus implements Listener {
       lore.add("<#FFE88A>▸ Нажмите, чтобы выбрать");
       item(g, slots[i++], f.icon(), f.name(), lore, () -> races(p, f));
     }
+    help(g, List.of("Создание персонажа — шаг 1 из 4.", "", "Выберите фракцию: Альянс или Орда.",
+        "Наведите на фракцию — список её рас.", "", "Дальше: раса → пол → подтверждение."));
     open(p, g);
   }
 
@@ -72,7 +74,9 @@ final class RaceMenus implements Listener {
       lore.add("<#FFE88A>▸ Нажмите, чтобы выбрать");
       item(g, RACE_SLOTS[i], r.iconMale(), r.name(), lore, () -> genders(p, r));
     }
-    item(g, 45, "ARROW", "<#FFD100>◂ К фракциям", List.of(), () -> factions(p));
+    item(g, 48, "ARROW", "<#FFD100>◂ Назад: фракции", List.of(), () -> factions(p));
+    help(g, List.of("Шаг 2 из 4: выберите расу.", "", "Наведите на расу — рост, бонусы,", "способность и доступные классы.",
+        "Нажмите, чтобы выбрать."));
     open(p, g);
   }
 
@@ -86,7 +90,8 @@ final class RaceMenus implements Listener {
     item(g, 24, r.iconFemale(), "<#FFD100>" + Gender.FEMALE.ru, List.of(
         "&7Рост: &f" + RaceConfig.height(m.config.scale(r, Gender.FEMALE)), "", "<#FFE88A>▸ Нажмите, чтобы выбрать"),
         () -> confirm(p, r, Gender.FEMALE));
-    item(g, 45, "ARROW", "<#FFD100>◂ К расам", List.of(), () -> races(p, m.config.factions.get(r.faction())));
+    item(g, 48, "ARROW", "<#FFD100>◂ Назад: расы", List.of(), () -> races(p, m.config.factions.get(r.faction())));
+    help(g, List.of("Шаг 3 из 4: выберите пол персонажа.", "", "Пол меняет облик (скин)", "и немного рост."));
     open(p, g);
   }
 
@@ -102,6 +107,8 @@ final class RaceMenus implements Listener {
           m.choose(p, r, gender);
         });
     item(g, 33, "RED_STAINED_GLASS", "&c✘ Назад", List.of("&7Выбрать другой пол или расу."), () -> genders(p, r));
+    help(g, List.of("Шаг 4 из 4: проверьте выбор.", "", "Зелёная кнопка — создать персонажа.", "Красная — вернуться и выбрать снова.", "",
+        "Расу потом сменит только администратор."));
     open(p, g);
   }
 
@@ -131,8 +138,11 @@ final class RaceMenus implements Listener {
         m.racials.cast(p, r);
       });
     }
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7/menu"), () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
-    item(g, 49, "BARRIER", "<#FF4040>Закрыть", List.of(), p::closeInventory);
+    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."),
+        () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
+    help(g, List.of("Ваша раса: рост, расовые особенности", "и способность.", "",
+        "Огненная кнопка — применить способность", "(или команда /racial). После — перезарядка.", "",
+        "Сменить расу может только администратор."));
     open(p, g);
   }
 
@@ -164,6 +174,10 @@ final class RaceMenus implements Listener {
   }
 
   // ---------------------------------------------------------------- helpers
+  private void help(Page g, List<String> lines) {
+    item(g, 49, "BOOK", "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), null);
+  }
+
   private static String strip(String s) {
     return ChatColor.stripColor(Text.c(s));
   }
