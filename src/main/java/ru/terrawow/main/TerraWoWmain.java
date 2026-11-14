@@ -178,6 +178,14 @@ public final class TerraWoWmain extends JavaPlugin implements Listener {
           races = null;
           getLogger().log(java.util.logging.Level.SEVERE, "Модуль рас не запущен", e);
         }
+      ru.terrawow.main.ui.UiIcons.enable(getConfig().getBoolean("ui-icons", true));
+      if (getConfig().getBoolean("ui-sounds.enabled", true)
+          && getConfig().getConfigurationSection("ui-sounds") != null)
+        getServer().getPluginManager().registerEvents(
+            new ru.terrawow.main.ui.UiSounds(this, getConfig().getConfigurationSection("ui-sounds")), this);
+      if (getConfig().getBoolean("ui-backgrounds", true))
+        getServer().getPluginManager().registerEvents(new ru.terrawow.main.ui.UiBackgrounds(
+            ru.terrawow.main.ui.UiSounds.windows(getConfig().getConfigurationSection("ui-sounds"))), this);
       if (getConfig().getBoolean("modules.menus", true))
         try { // server menus (/menu); a broken menus/*.yml must not stop the economy
           menuModule = new ru.terrawow.main.menu.MenuModule(this);

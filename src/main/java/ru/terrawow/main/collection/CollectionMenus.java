@@ -1,5 +1,6 @@
 package ru.terrawow.main.collection;
 
+import ru.terrawow.main.ui.UiIcons;
 import java.util.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ final class CollectionMenus implements Listener {
     Page g = new Page(p, "<#8A5A12>✦ <#3A2410>" + title + " <#8A5A12>✦");
     frame(g);
     String active = m.activeMob(p, kind);
-    item(g, 4, kind == Kind.MOUNT ? "SADDLE" : "LEAD", "<#FFD100>" + title, List.of(
+    item(g, 4, kind == Kind.MOUNT ? UiIcons.id("mounts", "SADDLE") : UiIcons.id("pets", "LEAD"), "<#FFD100>" + title, List.of(
         "&7Собрано: &f" + owned + " &8/ &f" + all.size()), false);
     int from = page * GRID.length;
     for (int i = 0; i < GRID.length && from + i < all.size(); i++) {
@@ -85,15 +86,15 @@ final class CollectionMenus implements Listener {
     }
     final int prev = page - 1, next = page + 1;
     // standard bottom row: main menu (left), pages, help (centre), this window's action (right)
-    if (page > 0) item(g, 47, "ARROW", "<#FFD100>◂ Предыдущая страница", List.of(), false, () -> list(p, kind, prev));
-    if (page < pages - 1) item(g, 51, "ARROW", "<#FFD100>Следующая страница ▸", List.of(), false, () -> list(p, kind, next));
+    if (page > 0) item(g, 47, UiIcons.id("page_prev", "ARROW"), "<#FFD100>◂ Предыдущая страница", List.of(), false, () -> list(p, kind, prev));
+    if (page < pages - 1) item(g, 51, UiIcons.id("page_next", "ARROW"), "<#FFD100>Следующая страница ▸", List.of(), false, () -> list(p, kind, next));
     if (kind == Kind.MOUNT)
-      item(g, 53, "LEAD", "<#FF4040>Спешиться", List.of("&7Сойти с маунта.", "&7В воздухе — медленное падение."), false, () -> {
+      item(g, 53, UiIcons.id("dismount", "LEAD"), "<#FF4040>Спешиться", List.of("&7Сойти с маунта.", "&7В воздухе — медленное падение."), false, () -> {
         p.closeInventory();
         m.dismiss(p, Kind.MOUNT, true);
       });
     else
-      item(g, 53, "BARRIER", "<#FF4040>Отозвать питомца", List.of("&7Питомец уйдёт."), false, () -> {
+      item(g, 53, UiIcons.id("dismiss_pet", "BARRIER"), "<#FF4040>Отозвать питомца", List.of("&7Питомец уйдёт."), false, () -> {
         p.closeInventory();
         m.dismiss(p, Kind.PET, true);
       });
@@ -139,7 +140,7 @@ final class CollectionMenus implements Listener {
       });
     }
     mainMenu(g, p);
-    item(g, 48, "ARROW", "<#FFD100>◂ Назад: " + (e.kind() == Kind.MOUNT ? "маунты" : "питомцы"), List.of(), false,
+    item(g, 48, UiIcons.id("back", "ARROW"), "<#FFD100>◂ Назад: " + (e.kind() == Kind.MOUNT ? "маунты" : "питомцы"), List.of(), false,
         () -> list(p, e.kind(), 0));
     help(g, List.of("Облики (скины) этого " + (e.kind() == Kind.MOUNT ? "маунта." : "питомца."), "",
         "ЛКМ по полученному облику — выбрать его.", "Выбор сохраняется" + (e.kind() == Kind.MOUNT
@@ -150,12 +151,12 @@ final class CollectionMenus implements Listener {
 
   // ---------------------------------------------------------------- standard bottom row
   private void mainMenu(Page g, Player p) {
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."), false,
+    item(g, 45, UiIcons.id("main_menu", "NETHER_STAR"), "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."), false,
         () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
   }
 
   private void help(Page g, List<String> lines) {
-    item(g, 49, "BOOK", "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), false);
+    item(g, 49, UiIcons.id("help", "BOOK"), "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), false);
   }
 
   // ---------------------------------------------------------------- helpers
@@ -164,6 +165,7 @@ final class CollectionMenus implements Listener {
   }
 
   private void frame(Page g) {
+    if (ru.terrawow.main.ui.UiBackgrounds.active()) return; // drawn background, no glass
     ItemStack black = pane(Material.BLACK_STAINED_GLASS_PANE), gold = pane(Material.ORANGE_STAINED_GLASS_PANE);
     for (int s = 0; s < 54; s++) g.inv.setItem(s, black);
     for (int s : new int[] {0, 8, 45, 53}) g.inv.setItem(s, gold);

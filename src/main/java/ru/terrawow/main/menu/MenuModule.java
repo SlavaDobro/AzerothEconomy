@@ -93,11 +93,16 @@ public final class MenuModule implements Listener, CommandExecutor, TabCompleter
     Page g = new Page(p, menu, text(p, menu.title()));
     for (Item i : menu.items())
       for (int slot : i.slots())
-        if (!g.slots.containsKey(slot) && visible(p, i)) place(p, g, slot, i);
-    Item fill = menu.fill() == null ? null : menu.item(menu.fill());
+        if (!g.slots.containsKey(slot) && visible(p, i) && !(glassHidden() && i.name().isBlank())) place(p, g, slot, i);
+    Item fill = menu.fill() == null || glassHidden() ? null : menu.item(menu.fill());
     if (fill != null)
       for (int s = 0; s < g.inv.getSize(); s++) if (!g.slots.containsKey(s)) place(p, g, s, fill);
     p.openInventory(g.inv);
+  }
+
+  /** With drawn backgrounds the decoration panes (items without a name, `fill`) are not placed. */
+  private static boolean glassHidden() {
+    return ru.terrawow.main.ui.UiBackgrounds.active();
   }
 
   private boolean visible(Player p, Item i) {
@@ -159,7 +164,7 @@ public final class MenuModule implements Listener, CommandExecutor, TabCompleter
       run(p, i.deny(), 0);
       return;
     }
-    p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.2f);
+    if (!ru.terrawow.main.ui.UiSounds.active()) p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.2f);
     run(p, actions, 0);
   }
 

@@ -1,5 +1,6 @@
 package ru.terrawow.main.race;
 
+import ru.terrawow.main.ui.UiIcons;
 import java.util.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ final class RaceMenus implements Listener {
   // ---------------------------------------------------------------- 1. faction
   void factions(Player p) {
     Page g = page(p, "<#8A5A12>✦ <#3A2410>Выбор фракции <#8A5A12>✦", true);
-    item(g, 4, "NETHER_STAR", "<#FFD100>Создание персонажа", List.of(
+    item(g, 4, UiIcons.id("race_create", "NETHER_STAR"), "<#FFD100>Создание персонажа", List.of(
         "&7Выберите фракцию, затем расу и пол.", "&7Раса выбирается &fодин раз&7:", "&7сменить её сможет только администратор."), null);
     int[] slots = {20, 24};
     int i = 0;
@@ -74,7 +75,7 @@ final class RaceMenus implements Listener {
       lore.add("<#FFE88A>▸ Нажмите, чтобы выбрать");
       item(g, RACE_SLOTS[i], r.iconMale(), r.name(), lore, () -> genders(p, r));
     }
-    item(g, 48, "ARROW", "<#FFD100>◂ Назад: фракции", List.of(), () -> factions(p));
+    item(g, 48, UiIcons.id("back", "ARROW"), "<#FFD100>◂ Назад: фракции", List.of(), () -> factions(p));
     help(g, List.of("Шаг 2 из 4: выберите расу.", "", "Наведите на расу — рост, бонусы,", "способность и доступные классы.",
         "Нажмите, чтобы выбрать."));
     open(p, g);
@@ -90,7 +91,7 @@ final class RaceMenus implements Listener {
     item(g, 24, r.iconFemale(), "<#FFD100>" + Gender.FEMALE.ru, List.of(
         "&7Рост: &f" + RaceConfig.height(m.config.scale(r, Gender.FEMALE)), "", "<#FFE88A>▸ Нажмите, чтобы выбрать"),
         () -> confirm(p, r, Gender.FEMALE));
-    item(g, 48, "ARROW", "<#FFD100>◂ Назад: расы", List.of(), () -> races(p, m.config.factions.get(r.faction())));
+    item(g, 48, UiIcons.id("back", "ARROW"), "<#FFD100>◂ Назад: расы", List.of(), () -> races(p, m.config.factions.get(r.faction())));
     help(g, List.of("Шаг 3 из 4: выберите пол персонажа.", "", "Пол меняет облик (скин)", "и немного рост."));
     open(p, g);
   }
@@ -101,12 +102,12 @@ final class RaceMenus implements Listener {
     List<String> lore = card(r, gender);
     lore.add(0, "&7Пол: &f" + gender.ru);
     item(g, 13, r.icon(gender), r.name(), lore, null);
-    item(g, 29, "LIME_STAINED_GLASS", "&a✔ Создать персонажа", List.of(
+    item(g, 29, UiIcons.id("confirm", "LIME_STAINED_GLASS"), "&a✔ Создать персонажа", List.of(
         "&7Раса: &r" + r.name(), "&7Пол: &f" + gender.ru, "", "&cСменить расу потом сможет", "&cтолько администратор."), () -> {
           p.closeInventory();
           m.choose(p, r, gender);
         });
-    item(g, 33, "RED_STAINED_GLASS", "&c✘ Назад", List.of("&7Выбрать другой пол или расу."), () -> genders(p, r));
+    item(g, 33, UiIcons.id("back", "RED_STAINED_GLASS"), "&c✘ Назад", List.of("&7Выбрать другой пол или расу."), () -> genders(p, r));
     help(g, List.of("Шаг 4 из 4: проверьте выбор.", "", "Зелёная кнопка — создать персонажа.", "Красная — вернуться и выбрать снова.", "",
         "Расу потом сменит только администратор."));
     open(p, g);
@@ -133,12 +134,12 @@ final class RaceMenus implements Listener {
       rl.add("&7Перезарядка: &f" + r.racial().cooldown() + " сек.");
       rl.add("");
       rl.add(left > 0 ? "&cЕщё " + (left + 999) / 1000 + " сек." : "<#FFE88A>▸ Нажмите, чтобы применить (/racial)");
-      item(g, 31, "BLAZE_POWDER", "<#FFD100>" + r.racial().name(), rl, () -> {
+      item(g, 31, UiIcons.id("racial", "BLAZE_POWDER"), "<#FFD100>" + r.racial().name(), rl, () -> {
         p.closeInventory();
         m.racials.cast(p, r);
       });
     }
-    item(g, 45, "NETHER_STAR", "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."),
+    item(g, 45, UiIcons.id("main_menu", "NETHER_STAR"), "<#FFD100>◂ Главное меню", List.of("&7Вернуться в главное меню (/menu)."),
         () -> ru.terrawow.main.MainMenu.open(m.plugin, p));
     help(g, List.of("Ваша раса: рост, расовые особенности", "и способность.", "",
         "Огненная кнопка — применить способность", "(или команда /racial). После — перезарядка.", "",
@@ -175,7 +176,7 @@ final class RaceMenus implements Listener {
 
   // ---------------------------------------------------------------- helpers
   private void help(Page g, List<String> lines) {
-    item(g, 49, "BOOK", "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), null);
+    item(g, 49, UiIcons.id("help", "BOOK"), "<#FFD100>❓ Как пользоваться", lines.stream().map(l -> l.isEmpty() ? "" : "&7" + l).toList(), null);
   }
 
   private static String strip(String s) {
@@ -184,6 +185,7 @@ final class RaceMenus implements Listener {
 
   private Page page(Player p, String title, boolean choosing) {
     Page g = new Page(p, title, choosing);
+    if (ru.terrawow.main.ui.UiBackgrounds.active()) return g; // drawn background, no glass
     ItemStack black = pane(Material.BLACK_STAINED_GLASS_PANE), gold = pane(Material.ORANGE_STAINED_GLASS_PANE);
     for (int s = 0; s < 54; s++) g.inv.setItem(s, black);
     for (int s : new int[] {0, 8, 45, 53}) g.inv.setItem(s, gold);
@@ -233,7 +235,7 @@ final class RaceMenus implements Listener {
     Runnable r = g.click.get(e.getRawSlot());
     if (r != null)
       try {
-        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.2f);
+        if (!ru.terrawow.main.ui.UiSounds.active()) p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.2f);
         r.run();
       } catch (RuntimeException ex) {
         RaceModule.msg(p, "&c" + ex.getMessage());

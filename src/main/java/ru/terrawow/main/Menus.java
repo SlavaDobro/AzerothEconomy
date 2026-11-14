@@ -41,10 +41,10 @@ public final class Menus implements Listener {
    */
   private Page page(Player player, String title, Runnable back, String... help) {
     Page m = new Page(player, "§6" + title);
-    put(m, 45, Material.NETHER_STAR, "◂ Главное меню", List.of("Вернуться в главное меню (/menu)."),
+    put(m, 45, "main_menu", Material.NETHER_STAR, "◂ Главное меню", List.of("Вернуться в главное меню (/menu)."),
         () -> MainMenu.open(p, player));
-    if (back != null) put(m, 48, Material.ARROW, "◂ " + p.text("back"), List.of(), back);
-    if (help.length > 0) put(m, 49, Material.BOOK, "❓ Как пользоваться", List.of(help), null);
+    if (back != null) put(m, 48, "back", Material.ARROW, "◂ " + p.text("back"), List.of(), back);
+    if (help.length > 0) put(m, 49, "help", Material.BOOK, "❓ Как пользоваться", List.of(help), null);
     return m;
   }
 
@@ -53,13 +53,20 @@ public final class Menus implements Listener {
     ItemMeta meta = pane.getItemMeta();
     meta.setHideTooltip(true);
     pane.setItemMeta(meta);
-    for (int s = 45; s < 54; s++) if (page.inventory.getItem(s) == null) page.inventory.setItem(s, pane);
+    if (!ru.terrawow.main.ui.UiBackgrounds.active()) // drawn background, no glass
+      for (int s = 45; s < 54; s++) if (page.inventory.getItem(s) == null) page.inventory.setItem(s, pane);
     if (player.isOnline()) player.openInventory(page.inventory);
   }
 
   public void put(
       Page m, int slot, Material icon, String title, List<String> lore, Runnable action) {
-    ItemStack i = new ItemStack(icon);
+    put(m, slot, null, icon, title, lore, action);
+  }
+
+  /** key = WoW icon (UiIcons) or null; nexo-icons.<MATERIAL> in config.yml still wins. */
+  public void put(
+      Page m, int slot, String key, Material icon, String title, List<String> lore, Runnable action) {
+    ItemStack i = key == null ? new ItemStack(icon) : ru.terrawow.main.ui.UiIcons.stack(key, icon);
     String custom = p.getConfig().getString("nexo-icons." + icon.name(), "");
     if (!custom.isEmpty())
       try {
@@ -82,11 +89,11 @@ public final class Menus implements Listener {
 
   private void pages(Page m, Player pl, int page, IntConsumer next) {
     if (page > 0)
-      put(m, 47, Material.ARROW, p.text("previous"), List.of(), () -> next.accept(page - 1));
+      put(m, 47, "page_prev", Material.ARROW, p.text("previous"), List.of(), () -> next.accept(page - 1));
     put(
         m,
         51,
-        Material.ARROW,
+        "page_next", Material.ARROW,
         p.text("next"),
         List.of(p.label("t_225e004e10d0") + (page + 1)),
         () -> next.accept(page + 1));
@@ -97,14 +104,14 @@ public final class Menus implements Listener {
     put(
         m,
         22,
-        Material.LIME_CONCRETE,
+        "confirm", Material.LIME_CONCRETE,
         p.text("confirm"),
         List.of(description),
         () -> {
           player.closeInventory();
           action.run();
         });
-    put(m, 24, Material.RED_CONCRETE, p.text("cancel"), List.of(), back);
+    put(m, 24, "close", Material.RED_CONCRETE, p.text("cancel"), List.of(), back);
     show(player, m);
   }
 
@@ -114,7 +121,7 @@ public final class Menus implements Listener {
     put(
         m,
         10,
-        Material.GOLD_INGOT,
+        "economy", Material.GOLD_INGOT,
         p.text("wallet"),
         List.of(
             p.ledger
@@ -125,7 +132,7 @@ public final class Menus implements Listener {
       put(
           m,
           12,
-          Material.CHEST,
+          "bank", Material.CHEST,
           p.text("bank"),
           List.of(p.label("t_ba41dd7312bf")),
           () -> bank(player));
@@ -133,7 +140,7 @@ public final class Menus implements Listener {
       put(
           m,
           14,
-          Material.WRITABLE_BOOK,
+          "mail", Material.WRITABLE_BOOK,
           p.text("mail"),
           List.of(p.label("t_d3a93df3e0b8")),
           () -> mailbox(player, 0));
@@ -141,7 +148,7 @@ public final class Menus implements Listener {
       put(
           m,
           16,
-          Material.EMERALD,
+          "trade", Material.EMERALD,
           p.text("trade"),
           List.of(p.label("t_bcc0b9609a87")),
           () -> {
@@ -155,15 +162,15 @@ public final class Menus implements Listener {
       put(
           m,
           29,
-          Material.GOLDEN_HOE,
+          "auction", Material.GOLDEN_HOE,
           p.text("auction"),
           List.of(p.label("t_b84cf9fbbed7")),
           () -> auction(player, "", false, 0));
-    put(m, 31, Material.PAPER, p.text("history"), List.of(), () -> history(player, 0, false));
+    put(m, 31, "history", Material.PAPER, p.text("history"), List.of(), () -> history(player, 0, false));
     put(
         m,
         33,
-        Material.ENDER_CHEST,
+        "inbox", Material.ENDER_CHEST,
         p.text("inbox"),
         List.of(p.label("t_b9bbe3b02d7d")),
         () -> inbox(player, 0));
@@ -238,7 +245,7 @@ public final class Menus implements Listener {
           put(
               m,
               40,
-              Material.EMERALD,
+              "buy", Material.EMERALD,
               p.label("t_50051e468d60"),
               List.of(p.ledger.currency("gold").format(price)),
               () ->
@@ -262,7 +269,7 @@ public final class Menus implements Listener {
           put(
               m,
               42,
-              Material.BOOK,
+              "history", Material.BOOK,
               p.label("t_151eb56c76d5"),
               List.of(),
               () -> history(player, 0, true));
@@ -292,7 +299,7 @@ public final class Menus implements Listener {
           put(
               m,
               46,
-              Material.HOPPER,
+              "deposit", Material.HOPPER,
               p.label("t_7b599d0a7fbd"),
               List.of(p.label("t_fc0d7a127414")),
               () -> {
@@ -311,7 +318,7 @@ public final class Menus implements Listener {
           put(
               m,
               52,
-              Material.EMERALD,
+              "buy", Material.EMERALD,
               p.label("t_43019b6c5594"),
               List.of(p.ledger.currency("gold").format(price)),
               () ->
@@ -330,7 +337,7 @@ public final class Menus implements Listener {
           put(
               m,
               53,
-              Material.NAME_TAG,
+              "rename", Material.NAME_TAG,
               p.label("t_963a4c0955c3"),
               List.of("/twm economy bank rename " + tab + p.label("t_dc45a828c0b3")),
               () -> p.tell(player, "bank-rename-help"));
@@ -359,7 +366,7 @@ public final class Menus implements Listener {
           put(
               m,
               53,
-              Material.HOPPER,
+              "take_all", Material.HOPPER,
               p.text("take-all"),
               List.of(p.label("t_92a6108e4021")),
               () -> {
@@ -382,7 +389,7 @@ public final class Menus implements Listener {
             put(
                 m,
                 i++,
-                Material.PAPER,
+                "letter", Material.PAPER,
                 str(row, "subject"),
                 List.of(
                     p.label("t_8c12119492bd") + str(row, "sender"),
@@ -395,7 +402,7 @@ public final class Menus implements Listener {
           put(
               m,
               53,
-              Material.WRITABLE_BOOK,
+              "mail_write", Material.WRITABLE_BOOK,
               p.label("t_41151de7d143"),
               List.of(
                   p.label("t_c6b70281fe4b"),
@@ -425,21 +432,21 @@ public final class Menus implements Listener {
           put(
               m,
               30,
-              Material.WRITTEN_BOOK,
+              "letter", Material.WRITTEN_BOOK,
               p.label("t_8393c450bf66"),
               wrap(str(row, "body"), 45),
               () -> player.sendMessage(str(row, "body")));
           put(
               m,
               32,
-              Material.GOLD_NUGGET,
+              "economy", Material.GOLD_NUGGET,
               p.ledger.currency(str(row, "currency")).format(num(row, "money")),
               List.of(p.label("t_3cdb3dea5221")),
               () -> claim(player, id, "money"));
           put(
               m,
               40,
-              Material.HOPPER,
+              "take_all", Material.HOPPER,
               p.text("take-all"),
               List.of(
                   p.label("t_b6ea7a08a4a0")
@@ -449,7 +456,7 @@ public final class Menus implements Listener {
           put(
               m,
               44,
-              Material.BARRIER,
+              "archive", Material.BARRIER,
               p.text("archive-mail"),
               List.of(),
               () ->
@@ -459,7 +466,7 @@ public final class Menus implements Listener {
             put(
                 m,
                 42,
-                Material.ARROW,
+                "mail_return", Material.ARROW,
                 p.label("t_77d9e7901c71"),
                 List.of(),
                 () ->
@@ -475,7 +482,7 @@ public final class Menus implements Listener {
           put(
               m,
               53,
-              Material.WRITABLE_BOOK,
+              "mail_write", Material.WRITABLE_BOOK,
               p.label("t_b9af23eeff5d"),
               List.of(p.label("t_9684e155df45") + str(row, "sender")),
               () -> {
@@ -567,21 +574,21 @@ public final class Menus implements Listener {
           put(
               m,
               46,
-              Material.CHEST,
+              "auction_lots", Material.CHEST,
               mine ? p.label("t_5211cfddf9bc") : p.label("t_33890521090d"),
               List.of(),
               () -> auction(player, query, !mine, 0));
           put(
               m,
               52,
-              Material.COMPASS,
+              "search", Material.COMPASS,
               p.label("t_323424efa7ff"),
               List.of(p.label("t_921a828b76f5"), "/twm economy auction mine"),
               () -> p.tell(player, "auction-help"));
           put(
               m,
               53,
-              Material.GOLD_INGOT,
+              "auction_sell", Material.GOLD_INGOT,
               p.label("t_2db4318c9ff4"),
               List.of(p.label("t_fc321d282b69"), p.label("t_d92c7542fb65")),
               () -> p.tell(player, "auction-help"));
@@ -604,7 +611,7 @@ public final class Menus implements Listener {
               put(
                   m,
                   20,
-                  Material.LIME_CONCRETE,
+                  "confirm", Material.LIME_CONCRETE,
                   p.label("t_f03c7e4857ec"),
                   List.of(p.label("t_8c12119492bd") + a),
                   () -> {
@@ -615,7 +622,7 @@ public final class Menus implements Listener {
             put(
                 m,
                 24,
-                Material.RED_CONCRETE,
+                "close", Material.RED_CONCRETE,
                 p.label("t_5729190a2794"),
                 List.of(),
                 () -> p.action(player, () -> p.ledger.cancelTrade(id), () -> home(player)));
@@ -658,14 +665,14 @@ public final class Menus implements Listener {
                 put(
                     m,
                     31,
-                    Material.GOLD_INGOT,
+                    "economy", Material.GOLD_INGOT,
                     p.label("t_cbedd94fece8"),
                     money,
                     () -> p.tell(player, "trade-money-help"));
                 put(
                     m,
                     10,
-                    Material.PAPER,
+                    "trade_side", Material.PAPER,
                     p.label("t_24515e463433"),
                     List.of(
                         a,
@@ -677,7 +684,7 @@ public final class Menus implements Listener {
                 put(
                     m,
                     28,
-                    Material.PAPER,
+                    "trade_side", Material.PAPER,
                     p.label("t_5abb1f58a118"),
                     List.of(
                         b,
@@ -689,7 +696,7 @@ public final class Menus implements Listener {
                 put(
                     m,
                     38,
-                    Material.HOPPER,
+                    "deposit", Material.HOPPER,
                     p.label("t_aad5555e132c"),
                     List.of(),
                     () -> {
@@ -706,7 +713,7 @@ public final class Menus implements Listener {
                 put(
                     m,
                     40,
-                    Material.LIME_CONCRETE,
+                    "confirm", Material.LIME_CONCRETE,
                     p.label("t_6bc730d76f2f"),
                     List.of(p.label("t_92d87b801a6c")),
                     () -> {
@@ -720,14 +727,14 @@ public final class Menus implements Listener {
                 put(
                     m,
                     42,
-                    Material.RED_CONCRETE,
+                    "close", Material.RED_CONCRETE,
                     p.label("t_cb78c0469932"),
                     List.of(p.label("t_c5e7de6610f1")),
                     () -> p.action(player, () -> p.ledger.cancelTrade(id), () -> home(player)));
                 put(
                     m,
                     53,
-                    Material.CLOCK,
+                    "refresh", Material.CLOCK,
                     p.label("t_f66fe5595fee"),
                     List.of(),
                     () -> trade(player));
@@ -750,7 +757,7 @@ public final class Menus implements Listener {
             put(
                 m,
                 i++,
-                Material.PAPER,
+                "history_row", Material.PAPER,
                 items ? str(row, "action") : str(row, "reason"),
                 items
                     ? List.of(str(row, "asset"), new Date(num(row, "created")).toString())

@@ -150,6 +150,25 @@ xp:
 # Nexo ID для иконки кнопки по MATERIAL; подписи остаются текстовыми.
 nexo-icons: {}
 
+# Иконки WoW на кнопках окон плагина: Nexo-предметы wf_icon_<ключ> (tools/install_wow_icons.py).
+# Нет Nexo или предмета — обычный предмет Minecraft.
+ui-icons: true
+
+# Нарисованный фон WoW во всех окнах (Nexo-шрифт wowforever:gui, tools/wow_gui_backgrounds.py):
+# заголовок окна = фон + старый текст золотом; стеклянные рамки не ставятся. Окна — те же, что в ui-sounds.windows.
+ui-backgrounds: true
+
+# Звуки окон (сервера, плагина и MMOCore): открыть, закрыть, перейти в другое окно / перелистнуть.
+# Звуки в ресурспаке Nexo: tools/install_ui_sounds.py. Пустая строка — без звука.
+ui-sounds:
+  enabled: true
+  open: 'wowforever:ui.open'
+  close: 'wowforever:ui.close'
+  page: 'wowforever:ui.page'
+  volume: 1.0
+  # чьи окна озвучивать (начало имени класса владельца окна)
+  windows: ['ru.terrawow.', 'io.lumine.mythic.lib.gui.', 'net.Indyuce.mmocore.']
+
 money-format: "{g} з {s} с {c} м"
 
 limits:
